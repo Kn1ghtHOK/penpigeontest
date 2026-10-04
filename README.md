@@ -2,8 +2,7 @@
 
 A small deployable app for showing the twelve homepage designs to someone and
 collecting what they think. It is separate from the main penpigeon.com site:
-its own Worker, its own database, its own URL. Nothing here ships with the
-main site (the repo-root `.assetsignore` excludes this folder).
+its own Worker, its own database, its own URL.
 
 **What a reviewer sees:** a gallery of the twelve designs, then each one in a
 viewer (desktop or phone-sized preview, "Full page" link, prev/next) with a
@@ -19,18 +18,15 @@ spread and favourites per design, plus every comment, behind a key you set.
 Just the pages (no feedback collection; answers stay in the browser and
 "Copy my feedback" is the way out):
 
-    cd design-explorations
     python3 -m http.server 8000      # then http://localhost:8000/
 
 With the real Worker and a local database:
 
-    cd design-explorations
     npx wrangler dev --var RESULTS_KEY:test
     # http://localhost:8787/   results: http://localhost:8787/results (key: test)
 
-## Deploy (run these from this folder, not the repo root)
+## Deploy (run these from the repo root)
 
-    cd design-explorations
     npx wrangler login               # once
     npx wrangler deploy              # creates the Worker and its D1 database
     npx wrangler secret put RESULTS_KEY    # choose a password for /results
