@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Results · PenPigeon review</title>
+<link rel="stylesheet" href="review.css">
+</head>
+<body>
+<main id="main" class="res">
+  <p class="eyebrow">PenPigeon · homepage redesign</p>
+  <h1>Results</h1>
+  <p class="lede">Everyone who has rated so far. Only you can see this page: it needs the <code>RESULTS_KEY</code> you set on the Worker.</p>
+  <form class="keyform" id="keyform">
+    <label class="sr" for="key">Results key</label>
+    <input id="key" type="password" autocomplete="off" placeholder="Results key" required>
+    <button class="btn" type="submit">Show results</button>
+    <button class="btn ghost" type="button" id="refresh" hidden>Refresh</button>
+    <button class="btn ghost" type="button" id="export" hidden>Download JSON</button>
+  </form>
+  <p class="err" id="err" role="alert" hidden></p>
+  <div id="out"></div>
+</main>
+<script src="designs.js"></script>
+<script>
+(function () {
+  var D = window.PP_DESIGNS;
+  var KEYSTORE = 'pp-results-key';
+  var out = document.getElementById('out');
+  var err = document.getElementById('err');
+  var input = document.getElementById('key');
+  var data = null;
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var who = function (r) { return r.name ? esc(r.name) : 'Anonymous ' + esc(r.id); };
+
+  try { input.value = sessionStorage.getItem(KEYSTORE) || ''; } catch (e) {}
+
+  function load() {
+    err.hidden = true;
+    return fetch('/api/results', { headers: { authorization: 'Bearer ' + input.value } }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(r.status === 404
+          ? 'No API here. This copy of the site has no Worker, so nothing was collected.'
+          : (j.error || 'Request failed'));
+        return j;
+      });
+    }).then(function (j) {
+      try { sessionStorage.setItem(KEYSTORE, input.value); } catch (e) {}
+      data = j;
+      render(j.reviewers);
+      document.getElementById('refresh').hidden = false;
+      document.getElementById('export').hidden = false;
+    }, function (e) {
+      err.textContent = e.message; err.hidden = false; out.innerHTML = '';
+    });
+  }
+
+  function render(rv) {
+    if (!rv.length) { out.innerHTML = '<p class="stats">No answers yet.</p>'; return; }
+    var rows = D.map(function (d) {
+      var scores = [], favs = 0, hist = [0, 0, 0, 0, 0];
+      rv.forEach(function (r) {
+        var x = r.ratings[d.id];
+        if (x && x.score) { scores.push(x.score); hist[x.score - 1]++; }
+        if (r.favourite === d.id) favs++;
+      });
+      var avg = scores.length ? scores.reduce(function (a, b) { return a + b; }, 0) / scores.length : null;
+      return { d: d, n: scores.length, avg: avg, favs: favs, hist: hist };
+    }).sort(function (a, b) { return (b.avg || 0) - (a.avg || 0) || b.favs - a.favs; });
+
+    var max = Math.max.apply(null, rows.map(function (r) { return Math.max.apply(null, r.hist); }).concat(1));
+    var last = Math.max.apply(null, rv.map(function (r) { return r.updated; }));
+    var html =
+      '<div class="stats"><span>' + rv.length + ' reviewer' + (rv.length === 1 ? '' : 's') + '</span>' +
+      '<span>Last answer ' + new Date(last).toLocaleString() + '</span></div>' +
+      '<table class="rank"><thead><tr><th>Design</th><th class="r">Average</th><th class="r">Rated</th><th>1–5</th><th class="r">Favourite</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        return '<tr><td><a class="who" href="' + r.d.id + '/index.html" target="_blank" rel="noopener">' +
+          '<img src="review-assets/thumbs/' + r.d.id + '.jpg" alt="">' + r.d.n + ' ' + esc(r.d.name) + '</a></td>' +
+          '<td class="r">' + (r.avg === null ? '–' : r.avg.toFixed(1)) + '</td>' +
+          '<td class="r">' + r.n + '</td>' +
+          '<td><span class="dist" aria-label="Ratings 1 to 5: ' + r.hist.join(', ') + '">' +
+          r.hist.map(function (h) { return '<i style="height:' + Math.round(2 + 20 * h / max) + 'px"></i>'; }).join('') + '</span></td>' +
+          '<td class="r">' + r.favs + '</td></tr>';
+      }).join('') + '</tbody></table>';
+
+    var blocks = D.map(function (d) {
+      var items = [];
+      rv.forEach(function (r) {
+        var x = r.ratings[d.id];
+        if (x && x.comment) items.push('<blockquote><cite>' + who(r) + (x.score ? ' · ' + x.score + '/5' : '') + '</cite>' + esc(x.comment) + '</blockquote>');
+      });
+      return items.length ? '<section><h2>' + d.n + ' ' + esc(d.name) + '</h2>' + items.join('') + '</section>' : '';
+    }).join('');
+    var overall = rv.filter(function (r) { return r.overall; }).map(function (r) {
+      var f = D.filter(function (d) { return d.id === r.favourite; })[0];
+      return '<blockquote><cite>' + who(r) + (f ? ' · favourite: ' + f.n + ' ' + esc(f.name) : '') + '</cite>' + esc(r.overall) + '</blockquote>';
+    }).join('');
+    html += '<div class="cmts">' + (overall ? '<section><h2>Overall</h2>' + overall + '</section>' : '') + blocks + '</div>';
+    out.innerHTML = html;
+  }
+
+  document.getElementById('keyform').addEventListener('submit', function (e) { e.preventDefault(); load(); });
+  document.getElementById('refresh').addEventListener('click', load);
+  document.getElementById('export').addEventListener('click', function () {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+    a.download = 'penpigeon-review-results.json';
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+  if (input.value) load();
+})();
+</script>
+</body>
+</html>

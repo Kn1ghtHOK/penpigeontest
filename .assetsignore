@@ -1,0 +1,14 @@
+# Not part of the deployed review site (same glob syntax as .gitignore).
+.wrangler/
+.dev.vars
+.DS_Store
+node_modules/
+.playwright-cli/
+
+*.md
+wrangler.jsonc
+.assetsignore
+worker.js
+validate.js
+test_*.mjs
+

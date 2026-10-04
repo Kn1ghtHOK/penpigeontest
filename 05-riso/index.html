@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PenPigeon: send a photo as a postcard</title>
+  <meta name="description" content="Your photo goes on the front. A pen writes your note on the back. We stamp it and mail it. $4 a card, US addresses only.">
+  <meta name="theme-color" content="#eeece2">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23eeece2'/%3E%3Cellipse cx='27' cy='40' rx='19' ry='15' fill='%231ea0e6'/%3E%3Ccircle cx='43' cy='25' r='10' fill='%231ea0e6'/%3E%3Cpath d='M52 24l9 3-2 4-8-2z' fill='%23ffdc1c'/%3E%3Cpath d='M20 36c8-6 18-6 24 0' stroke='%23ff4b9f' stroke-width='5' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Mono:wght@400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- halftone screens, each ink at its own angle like a real separation -->
+    <pattern id="dY" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="2.5" style="fill:var(--yellow)"/></pattern>
+    <pattern id="dP" width="7.5" height="7.5" patternUnits="userSpaceOnUse" patternTransform="rotate(75)"><circle cx="3.75" cy="3.75" r="2.7" style="fill:var(--pink)"/></pattern>
+    <pattern id="dB" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><circle cx="3.5" cy="3.5" r="2.5" style="fill:var(--blue)"/></pattern>
+    <pattern id="dB2" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><circle cx="4.5" cy="4.5" r="3.5" style="fill:var(--blue)"/></pattern>
+    <pattern id="dK" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="3" cy="3" r="1.45" style="fill:var(--ink)"/></pattern>
+
+    <filter id="rough" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <mask id="seaMask" maskUnits="userSpaceOnUse" x="0" y="0" width="600" height="400">
+      <rect width="600" height="400" fill="#fff"/>
+      <rect x="398" y="276" width="96" height="7" fill="#000"/>
+      <rect x="410" y="290" width="76" height="6" fill="#000"/>
+      <rect x="402" y="304" width="92" height="7" fill="#000"/>
+      <rect x="420" y="320" width="62" height="6" fill="#000"/>
+      <rect x="408" y="338" width="80" height="7" fill="#000"/>
+      <rect x="426" y="358" width="48" height="6" fill="#000"/>
+    </mask>
+
+    <mask id="perfMask" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="120">
+      <rect width="100" height="120" fill="#fff"/>
+      <g fill="#000">
+        <circle cx="10" cy="3" r="3"/><circle cx="24" cy="3" r="3"/><circle cx="38" cy="3" r="3"/><circle cx="52" cy="3" r="3"/><circle cx="66" cy="3" r="3"/><circle cx="80" cy="3" r="3"/><circle cx="94" cy="3" r="3"/>
+        <circle cx="10" cy="117" r="3"/><circle cx="24" cy="117" r="3"/><circle cx="38" cy="117" r="3"/><circle cx="52" cy="117" r="3"/><circle cx="66" cy="117" r="3"/><circle cx="80" cy="117" r="3"/><circle cx="94" cy="117" r="3"/>
+        <circle cx="3" cy="14" r="3"/><circle cx="3" cy="30" r="3"/><circle cx="3" cy="46" r="3"/><circle cx="3" cy="62" r="3"/><circle cx="3" cy="78" r="3"/><circle cx="3" cy="94" r="3"/><circle cx="3" cy="108" r="3"/>
+        <circle cx="97" cy="14" r="3"/><circle cx="97" cy="30" r="3"/><circle cx="97" cy="46" r="3"/><circle cx="97" cy="62" r="3"/><circle cx="97" cy="78" r="3"/><circle cx="97" cy="94" r="3"/><circle cx="97" cy="108" r="3"/>
+      </g>
+    </mask>
+
+    <!-- PIGEON, head to the right, one symbol per ink plate (480 x 400) -->
+    <symbol id="pg-blue" viewBox="0 0 480 400">
+      <path style="fill:var(--blue)" d="M322 90C348 82 384 98 386 128C387 150 374 170 373 204C372 268 330 332 250 334C190 336 120 302 70 270L72 214C132 200 202 168 262 150C282 144 292 130 296 112C300 98 310 92 322 90Z"/>
+      <path style="fill:var(--blue)" d="M80 270L14 306L34 272L4 266L34 244L10 222L48 216L76 212Z"/>
+    </symbol>
+    <symbol id="pg-pink" viewBox="0 0 480 400">
+      <path fill="url(#dP)" d="M92 266C128 214 232 172 322 204C306 262 224 296 150 286C128 282 108 276 92 266Z"/>
+      <path style="fill:var(--pink)" d="M373 206C371 266 330 326 258 333C298 292 330 246 347 204Z"/>
+      <g fill="none" style="stroke:var(--pink)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M236 330L228 374M228 374L208 384M228 374L222 390M228 374L244 388"/>
+        <path d="M270 332L274 376M274 376L254 388M274 376L270 392M274 376L290 388"/>
+      </g>
+    </symbol>
+    <symbol id="pg-yellow" viewBox="0 0 480 400">
+      <path style="fill:var(--yellow)" d="M384 122L434 138L386 154Z"/>
+      <circle cx="358" cy="118" r="16" style="fill:var(--yellow)"/>
+      <ellipse cx="338" cy="186" rx="44" ry="27" transform="rotate(28 338 186)" fill="url(#dY)"/>
+      <path d="M96 232C150 206 214 178 262 162L296 120C300 150 270 190 212 214C160 236 120 246 96 248Z" fill="url(#dY)"/>
+      <g fill="none" style="stroke:var(--yellow)" stroke-width="9" stroke-linecap="round">
+        <path d="M132 252C176 228 238 210 300 212"/>
+        <path d="M150 272C192 252 246 240 302 236"/>
+      </g>
+    </symbol>
+    <symbol id="pg-black" viewBox="0 0 480 400">
+      <g fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)">
+        <path d="M322 90C348 82 384 98 386 128C387 150 374 170 373 204C372 268 330 332 250 334C190 336 120 302 70 270L72 214C132 200 202 168 262 150C282 144 292 130 296 112C300 98 310 92 322 90Z"/>
+        <path d="M80 270L14 306L34 272L4 266L34 244L10 222L48 216L76 212"/>
+        <path stroke-width="2.4" d="M92 266C128 214 232 172 322 204C306 262 224 296 150 286C128 282 108 276 92 266Z"/>
+        <path stroke-width="2" d="M112 262C156 236 236 214 306 216"/>
+        <path stroke-width="2" d="M130 274C176 254 246 238 308 234"/>
+        <path stroke-width="2" d="M152 285C198 270 254 258 304 250"/>
+        <path stroke-width="2.6" d="M384 122L434 138L386 154"/>
+        <path stroke-width="2.6" d="M236 330L228 374M228 374L208 384M228 374L222 390M228 374L244 388M270 332L274 376M274 376L254 388M274 376L270 392M274 376L290 388"/>
+      </g>
+      <path d="M373 206C371 266 330 326 258 333C298 292 330 246 347 204Z" fill="url(#dK)"/>
+      <circle cx="358" cy="118" r="6.6" style="fill:var(--ink)"/>
+    </symbol>
+
+    <!-- SAMPLE PHOTO (sunset, three plates and a key), 600 x 400 -->
+    <symbol id="ph-yellow" viewBox="0 0 600 400">
+      <rect width="600" height="264" style="fill:var(--yellow)"/>
+      <rect x="360" y="272" width="170" height="128" fill="url(#dY)"/>
+    </symbol>
+    <symbol id="ph-pink" viewBox="0 0 600 400">
+      <circle cx="436" cy="170" r="132" fill="url(#dP)"/>
+      <circle cx="436" cy="170" r="62" style="fill:var(--pink)"/>
+      <path style="fill:var(--pink)" d="M0 342C70 320 150 334 230 352L250 400L0 400Z"/>
+    </symbol>
+    <symbol id="ph-blue" viewBox="0 0 600 400">
+      <path style="fill:var(--blue)" d="M0 264L74 166L124 212L196 118L276 236L336 192L408 264Z"/>
+      <path fill="url(#dB)" d="M250 264L330 214L398 244L486 196L600 264Z"/>
+      <g mask="url(#seaMask)"><rect y="264" width="600" height="136" fill="url(#dB2)"/></g>
+      <rect y="262" width="600" height="6" style="fill:var(--blue)"/>
+    </symbol>
+    <symbol id="ph-black" viewBox="0 0 600 400">
+      <g fill="none" style="stroke:var(--ink)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M120 84q12-14 24 0q12-14 24 0"/>
+        <path d="M196 58q9-10 18 0q9-10 18 0"/>
+        <path d="M92 122q8-9 16 0q8-9 16 0"/>
+      </g>
+      <path d="M300 316H344L334 332H312Z" style="fill:var(--ink)"/>
+      <path d="M322 312V278L346 312Z" fill="url(#dK)" style="stroke:var(--ink)" stroke-width="2.4" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- SAMPLE STAMP (100 x 120) -->
+    <symbol id="st-pink" viewBox="0 0 100 120">
+      <path mask="url(#perfMask)" fill-rule="evenodd" style="fill:var(--pink)" d="M4 4H96V116H4Z M13 13V107H87V13Z"/>
+      <circle cx="68" cy="38" r="12" style="fill:var(--pink)"/>
+    </symbol>
+    <symbol id="st-yellow" viewBox="0 0 100 120">
+      <rect x="11" y="11" width="78" height="98" style="fill:var(--yellow)"/>
+    </symbol>
+    <symbol id="st-blue" viewBox="0 0 100 120">
+      <g transform="translate(17 40) scale(0.165)"><use href="#pg-blue" width="480" height="400"/></g>
+    </symbol>
+    <symbol id="st-black" viewBox="0 0 100 120">
+      <g transform="translate(17 40) scale(0.165)"><use href="#pg-black" width="480" height="400"/></g>
+      <text x="50" y="99" text-anchor="middle" font-family="DM Mono, monospace" font-weight="500" font-size="7.4" style="fill:var(--ink)">SAMPLE</text>
+      <text x="50" y="27" text-anchor="middle" font-family="DM Mono, monospace" font-weight="500" font-size="6.4" style="fill:var(--ink)">PEN PIGEON</text>
+    </symbol>
+
+    <!-- tiny staple -->
+    <symbol id="staple" viewBox="0 0 44 14">
+      <rect x="2" y="3" width="40" height="6" rx="3" fill="#aeb0b5"/>
+      <rect x="2" y="3" width="40" height="2.2" rx="1.1" fill="#d6d8dc"/>
+      <rect x="2" y="7.4" width="40" height="1.6" rx=".8" fill="#7d7f86"/>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- the zine's spine: two staples that stay put while the pages turn -->
+<div class="spine" aria-hidden="true">
+  <svg class="staple staple--1" viewBox="0 0 44 14"><use href="#staple"/></svg>
+  <svg class="staple staple--2" viewBox="0 0 44 14"><use href="#staple"/></svg>
+</div>
+
+<header class="nav" id="nav">
+  <div class="nav__in">
+    <a class="brand" href="#top" aria-label="PenPigeon, home">
+      <svg class="brand__mark" viewBox="0 0 480 400" aria-hidden="true" focusable="false">
+        <use class="m" href="#pg-blue"/>
+        <use class="m b-pink" href="#pg-pink"/>
+        <use class="m b-yellow" href="#pg-yellow"/>
+        <use href="#pg-black"/>
+      </svg>
+      <span class="brand__word" translate="no">PenPigeon</span>
+    </a>
+    <nav class="nav__menu" id="nav-menu" aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="../../create.html">Create</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="../../contact.html">Contact</a></li>
+        <li class="nav__login"><a href="../../login.html">Log in</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--sm" href="../../create.html"><span>Make one</span></a>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+      <span class="sr-only">Menu</span>
+      <span class="nav__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 1. HERO -->
+  <section class="spread hero" id="top" aria-labelledby="hero-title">
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <h1 class="hero__title misreg" id="hero-title">Send a photo as a <span class="mark">postcard.</span></h1>
+        <p class="hero__sub">Your photo goes on the front. A pen writes your note on the back. We stamp it and mail it.</p>
+        <div class="hero__actions">
+          <a class="btn" href="../../create.html"><span>Make one</span></a>
+          <a class="btn btn--paper" href="#card"><span>See how it&rsquo;s made</span></a>
+        </div>
+        <ul class="facts" aria-label="At a glance">
+          <li class="fact fact--y">US mail only</li>
+          <li class="fact fact--b">$4 a card</li>
+          <li class="fact fact--p">about 2 min</li>
+        </ul>
+        <p class="hero__note">No account needed to try it.</p>
+      </div>
+
+      <div class="hero__art" aria-hidden="true">
+        <canvas class="ht hero__sun" data-ink="pink" data-field="radial" data-pitch="13" data-angle="75" data-grow="0.55"></canvas>
+        <div class="hero__scrap"></div>
+        <div class="plates pigeon pigeon--hero">
+          <svg class="plate plate--blue" viewBox="0 0 480 400" focusable="false"><use href="#pg-blue"/></svg>
+          <svg class="plate plate--pink" viewBox="0 0 480 400" focusable="false"><use href="#pg-pink"/></svg>
+          <svg class="plate plate--yellow" viewBox="0 0 480 400" focusable="false"><use href="#pg-yellow"/></svg>
+          <svg class="plate plate--black" viewBox="0 0 480 400" focusable="false"><use href="#pg-black"/></svg>
+        </div>
+        <svg class="regmark regmark--a" viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2V38M2 20H38" stroke="currentColor" stroke-width="2"/></svg>
+        <svg class="regmark regmark--b" viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2V38M2 20H38" stroke="currentColor" stroke-width="2"/></svg>
+        <p class="readout readout--hero"><span class="readout__k">Plates:</span> pink, blue, yellow, black. <span class="readout__state" data-reg-state>Off register.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="seam seam--blue" aria-hidden="true"><canvas class="ht" data-ink="blue" data-field="up" data-pitch="9" data-angle="15" data-grow="0"></canvas></div>
+
+  <!-- 2. THE CARD: front, back, pen -->
+  <section class="spread spread--blue card" id="card" aria-labelledby="card-title">
+    <div class="stage">
+      <canvas class="ht card__dots" data-ink="pink" data-field="radial" data-cx="0.05" data-cy="0.95" data-pitch="14" data-angle="75" data-grow="1" aria-hidden="true"></canvas>
+      <div class="stage__text">
+        <h2 class="stage__title misreg" id="card-title">Print on the front. Pen on the back.</h2>
+        <div class="caps">
+          <p class="cap cap--front">The front is your photo, printed in color.</p>
+          <p class="cap cap--back">The back is your note. It is not a font. A pen draws it stroke by stroke along a path our software makes.</p>
+          <p class="cap cap--stamp">Then we stamp it by hand and put it in the US Mail.</p>
+        </div>
+        <p class="readout readout--pen" aria-hidden="true">Sample card. Pen path: stroke <span id="stroke-n">40</span> of 40.</p>
+      </div>
+
+      <figure class="stage__cards">
+        <div class="postcard postcard--back">
+          <div class="back__rule" aria-hidden="true"></div>
+          <svg class="note" viewBox="0 0 563.2 175.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M 10.52,47.95 L 6.56,46.09 L 4.56,41.86 L 4.76,39.98 L 6.66,35.78 L 10.72,33.95 L 12.79,33.72 L 16.76,36.06 L 18.49,40.16 L 18.26,46.08 L 15.73,76.23" stroke-width="2.11"/>
+            <path d="M 36.72,33.94 L 15.85,76.38" stroke-width="1.97"/>
+            <path d="M 36.93,34.18 L 32.28,76.36" stroke-width="1.77"/>
+            <path d="M 61.21,34.51 L 57.01,36.59 L 50.77,42.47 L 44.80,50.68 L 38.58,62.53 L 32.21,76.51" stroke-width="1.78"/>
+            <path d="M 71.83,47.84 L 71.91,49.70 L 73.60,49.64 L 73.60,47.79 L 71.69,48.01" stroke-width="1.78"/>
+            <path d="M 65.15,65.98 L 69.28,58.13 L 64.71,69.89 L 64.79,73.64 L 66.95,75.78 L 69.04,75.83 L 73.00,73.91 L 75.01,71.94 L 79.26,66.04" stroke-width="1.96"/>
+            <path d="M 83.24,66.36 L 87.34,60.44 L 89.50,56.51 L 89.63,60.41 L 93.53,67.00 L 95.26,71.42 L 95.03,75.57 L 91.00,77.26" stroke-width="1.94"/>
+            <path d="M 82.61,74.98 L 86.70,77.01 L 95.16,77.51 L 99.32,75.66 L 101.46,73.37 L 106.05,67.23" stroke-width="1.75"/>
+            <path d="M 109.92,66.37 L 113.99,60.23 L 120.55,50.51 L 122.59,46.43 L 124.78,40.24 L 124.83,36.56 L 122.99,34.68 L 118.74,36.30 L 116.69,40.18 L 114.38,48.23 L 111.94,60.45 L 109.35,76.50" stroke-width="2.17"/>
+            <path d="M 109.31,76.52 L 111.66,70.55 L 113.89,66.44 L 118.05,60.45 L 122.12,58.71 L 126.09,58.70 L 128.23,60.77 L 127.92,64.81 L 125.54,70.95 L 125.40,75.03 L 127.44,77.25 L 129.77,77.45 L 133.85,75.31 L 136.13,73.39 L 140.49,67.65" stroke-width="1.96"/>
+            <path d="M 168.26,66.43 L 172.12,58.09 L 168.41,70.57 L 168.19,74.36 L 170.18,76.38 L 174.49,76.41 L 178.84,74.34 L 182.85,70.17 L 186.94,63.79" stroke-width="1.91"/>
+            <path d="M 188.71,57.63 L 177.23,94.97 L 175.41,99.17 L 171.11,101.46 L 168.77,99.27 L 168.48,94.90 L 170.59,88.81 L 176.91,82.63 L 182.94,78.36 L 186.82,75.99 L 192.80,71.47 L 198.85,65.17" stroke-width="2.01"/>
+            <path d="M 214.61,56.77 L 210.38,56.90 L 206.18,59.10 L 204.04,61.17 L 202.08,65.48 L 202.24,69.87 L 204.57,74.11 L 208.69,75.93 L 212.84,76.17 L 216.95,74.10 L 219.14,71.83 L 221.07,67.62 L 220.88,63.20 L 218.68,59.06 L 214.55,56.77 L 212.78,59.13 L 212.93,63.52 L 215.13,67.81 L 219.42,69.57 L 225.58,69.21 L 229.64,66.93 L 231.93,64.92" stroke-width="2.01"/>
+            <path d="M 234.64,64.69 L 238.43,56.68 L 234.77,68.81 L 234.76,73.07 L 237.00,75.11 L 241.02,75.13 L 244.90,72.91 L 249.05,68.73 L 253.09,62.51" stroke-width="2.00"/>
+            <path d="M 255.22,56.55 L 251.29,68.66 L 251.28,72.80 L 253.42,74.71 L 255.52,74.58 L 259.61,72.47 L 261.38,70.45 L 265.49,64.33" stroke-width="2.15"/>
+            <path d="M 296.63,56.11 L 292.40,60.21 L 290.10,66.18 L 290.03,70.58 L 291.86,74.76 L 295.75,74.89 L 300.25,73.03 L 304.50,68.93" stroke-width="2.04"/>
+            <path d="M 309.25,56.54 L 304.31,68.75 L 304.00,72.80 L 306.07,75.24 L 310.51,75.49 L 314.55,73.30 L 318.86,69.45 L 321.17,63.43 L 321.57,57.30" stroke-width="2.16"/>
+            <path d="M 321.53,56.98 L 323.41,65.30 L 325.42,67.42 L 329.49,67.76 L 333.81,65.83" stroke-width="2.02"/>
+            <path d="M 339.28,72.08 L 343.38,70.18 L 345.42,68.59 L 347.72,64.79 L 347.83,60.76 L 345.72,58.72 L 343.99,58.50 L 339.78,60.47 L 337.71,64.16 L 337.33,70.33 L 339.27,74.56 L 343.43,76.61 L 347.66,76.53 L 351.47,74.72 L 353.64,72.65 L 357.97,66.71" stroke-width="1.81"/>
+            <path d="M 361.20,64.78 L 365.15,58.33 L 367.33,53.69 L 367.24,57.98 L 374.02,57.98 L 376.16,60.26 L 376.31,64.40 L 374.40,71.04 L 374.30,73.40 L 376.40,75.29 L 378.95,75.13 L 383.24,72.91 L 385.43,70.70 L 389.71,63.88" stroke-width="2.21"/>
+            <path d="M 395.02,69.95 L 399.19,67.85 L 401.16,65.91 L 403.37,61.52 L 403.35,57.19 L 401.07,55.10 L 398.86,55.26 L 394.85,57.38 L 392.90,61.38 L 392.90,67.90 L 395.01,72.23 L 399.29,74.37 L 403.63,74.15 L 408.03,71.86 L 410.23,69.71 L 414.42,63.52" stroke-width="2.18"/>
+            <path d="M 442.27,67.15 L 446.18,61.19 L 452.25,51.05 L 454.28,47.20 L 456.40,41.42 L 456.24,37.16 L 454.37,35.03 L 450.28,37.15 L 448.31,41.24 L 446.32,49.42 L 444.38,61.56 L 442.60,77.60" stroke-width="2.13"/>
+            <path d="M 442.68,77.59 L 444.31,71.25 L 446.50,67.01 L 450.33,61.30 L 454.33,59.41 L 458.15,59.49 L 460.11,61.58 L 460.20,65.28 L 458.03,71.16 L 458.20,74.92 L 460.01,76.87 L 462.12,76.90 L 466.17,75.22 L 468.10,73.33 L 472.18,67.02" stroke-width="2.07"/>
+            <path d="M 477.42,71.96 L 481.72,69.88 L 483.83,67.89 L 486.29,63.63 L 486.38,59.32 L 484.35,57.43 L 482.15,57.42 L 478.04,59.30 L 475.77,63.26 L 475.73,69.44 L 477.63,73.89 L 481.65,76.16 L 485.80,76.50 L 490.11,74.23 L 491.95,72.07 L 496.56,65.82" stroke-width="1.76"/>
+            <path d="M 499.51,66.58 L 503.44,60.57 L 505.60,56.79 L 505.30,60.83 L 511.35,61.06 L 513.37,62.94 L 513.36,66.83 L 511.34,72.59 L 511.11,74.74 L 513.24,76.63 L 515.41,76.91 L 519.27,74.96 L 521.15,73.02 L 525.42,67.25" stroke-width="2.07"/>
+            <path d="M 531.28,71.72 L 535.66,69.80 L 537.92,67.58 L 540.02,63.72 L 540.29,59.56 L 538.39,57.39 L 536.38,57.31 L 532.05,59.24 L 529.61,63.21 L 529.60,69.46 L 531.30,73.63 L 535.20,75.79 L 539.12,75.99 L 543.53,74.18 L 545.61,72.37 L 549.91,66.50" stroke-width="1.95"/>
+            <path d="M 555.49,65.46 L 553.09,67.65 L 555.22,69.67 L 557.22,67.39 L 555.34,65.21" stroke-width="1.76"/>
+            <path d="M 9.60,121.49 L 5.36,119.63 L 3.22,115.75 L 2.98,113.49 L 4.94,109.56 L 9.24,107.58 L 11.25,107.25 L 15.46,109.24 L 17.69,113.46 L 17.67,117.38 L 15.68,127.81 L 13.92,135.77 L 9.96,150.35" stroke-width="1.79"/>
+            <path d="M 13.83,135.89 L 19.67,119.59 L 23.59,111.28 L 25.60,109.28 L 29.82,106.79 L 31.66,106.94 L 35.74,108.90 L 37.93,112.82 L 37.95,116.80 L 36.11,127.14 L 34.50,135.52 L 30.59,149.88" stroke-width="1.98"/>
+            <path d="M 34.37,135.51 L 40.16,118.88 L 44.29,110.44 L 46.15,108.15 L 49.97,105.90 L 51.86,105.93 L 56.23,108.01 L 58.35,112.06 L 58.71,116.33 L 56.79,126.51 L 53.13,140.84 L 53.24,146.91 L 55.08,149.16 L 57.10,148.90 L 61.41,146.60 L 63.47,144.67 L 67.11,138.56" stroke-width="2.16"/>
+            <path d="M 83.90,130.26 L 79.72,129.97 L 75.46,132.03 L 73.29,133.89 L 71.32,138.25 L 70.96,142.27 L 72.74,146.71 L 77.04,149.21 L 81.36,149.48 L 85.40,147.54 L 87.58,145.59 L 89.68,141.13 L 90.07,137.18 L 88.33,132.73 L 83.97,130.25 L 82.03,132.44 L 81.85,136.43 L 83.76,140.87 L 87.91,142.90 L 94.23,143.12 L 98.36,141.26 L 100.23,139.24" stroke-width="2.17"/>
+            <path d="M 102.86,138.06 L 106.97,131.59 L 109.29,127.21 L 109.25,131.36 L 115.69,130.85 L 118.08,133.01 L 118.32,137.45 L 116.44,143.80 L 116.69,146.13 L 118.92,148.18 L 121.15,147.98 L 125.26,145.52 L 127.50,143.24 L 131.33,136.76" stroke-width="2.03"/>
+            <path d="M 136.68,145.26 L 140.82,143.32 L 142.89,141.44 L 145.03,137.20 L 145.00,132.84 L 142.76,130.92 L 140.57,130.79 L 136.65,133.19 L 134.49,137.54 L 134.72,143.46 L 136.73,147.79 L 140.74,149.75 L 145.05,149.58 L 149.24,147.39 L 151.44,145.10 L 155.60,139.04" stroke-width="1.96"/>
+            <path d="M 180.46,139.69 L 184.21,133.38 L 186.00,129.46 L 186.00,133.59 L 190.36,139.50 L 192.47,143.55 L 192.67,147.46 L 188.83,149.76" stroke-width="2.09"/>
+            <path d="M 180.72,147.81 L 184.70,149.77 L 193.04,149.48 L 196.91,147.34 L 198.76,145.39 L 202.64,139.06" stroke-width="2.05"/>
+            <path d="M 219.70,132.94 L 215.27,133.01 L 210.73,134.79 L 208.59,136.73 L 206.10,141.27 L 205.89,145.55 L 207.89,150.01 L 212.57,152.39 L 217.04,152.74 L 221.58,150.53 L 223.91,148.37 L 225.99,143.88 L 226.21,139.74 L 224.30,135.30 L 219.75,133.05 L 217.55,135.04 L 217.57,139.60 L 219.58,144.07 L 223.81,146.55 L 230.27,146.87 L 234.86,144.45 L 237.23,142.43" stroke-width="2.14"/>
+            <path d="M 252.93,132.74 L 248.50,132.78 L 244.02,134.81 L 242.21,137.20 L 240.11,141.38 L 239.95,145.35 L 242.32,149.50 L 246.40,151.89 L 250.70,151.67 L 254.78,149.40 L 256.76,147.53 L 259.14,143.33 L 258.99,139.18 L 256.67,134.94 L 252.47,132.85 L 250.35,134.91 L 250.43,139.10 L 252.69,143.14 L 257.02,145.41 L 263.36,145.14 L 267.43,142.89 L 269.71,140.65" stroke-width="1.99"/>
+            <path d="M 272.99,138.51 L 276.75,132.67 L 280.77,130.71 L 282.91,132.96 L 282.67,134.62 L 280.86,142.79 L 278.82,148.55" stroke-width="1.87"/>
+            <path d="M 280.65,142.77 L 282.66,138.58 L 286.57,132.71 L 290.73,130.84 L 294.94,130.80 L 297.02,132.97 L 296.99,137.05 L 294.81,142.76 L 294.55,146.74 L 296.66,148.61 L 298.90,148.88 L 302.92,147.05 L 304.69,145.06 L 308.47,138.84" stroke-width="1.99"/>
+            <path d="M 401.90,159.13 L 397.43,152.42 L 393.13,141.57 L 391.05,128.46 L 391.16,115.40 L 393.45,108.53 L 397.79,106.26 L 402.53,106.62 L 404.62,108.70 L 406.98,115.41 L 406.73,121.85 L 404.31,132.82 L 397.85,152.55 L 393.47,165.76 L 391.25,172.32 L 388.81,176.46 L 384.37,178.47 L 382.44,176.14 L 382.43,172.01 L 384.53,165.66 L 389.18,159.16 L 393.35,154.57 L 399.96,150.45 L 408.71,146.23" stroke-width="1.77"/>
+            <g class="pen" aria-hidden="true">
+              <g transform="rotate(26)">
+                <path d="M0 0L-5 -13H5Z" fill="#17151f"/>
+                <rect x="-5" y="-62" width="10" height="49" fill="#2a2833"/>
+                <rect x="-5" y="-44" width="10" height="9" style="fill:#ff4b9f"/>
+              </g>
+            </g>
+          </svg>
+          <div class="stamp plates" aria-hidden="true">
+            <svg class="plate plate--blue" viewBox="0 0 100 120"><use href="#st-blue"/></svg>
+            <svg class="plate plate--pink" viewBox="0 0 100 120"><use href="#st-pink"/></svg>
+            <svg class="plate plate--yellow" viewBox="0 0 100 120"><use href="#st-yellow"/></svg>
+            <svg class="plate plate--black" viewBox="0 0 100 120"><use href="#st-black"/></svg>
+          </div>
+          <svg class="postmark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <defs><path id="pm-ring" d="M60 60m-40 0a40 40 0 1 1 80 0a40 40 0 1 1 -80 0"/></defs>
+            <circle cx="60" cy="60" r="52" fill="none" style="stroke:var(--blue)" stroke-width="3"/>
+            <circle cx="60" cy="60" r="30" fill="none" style="stroke:var(--blue)" stroke-width="2"/>
+            <text font-family="DM Mono, monospace" font-weight="500" font-size="11.5" letter-spacing="1.4" style="fill:var(--blue)"><textPath href="#pm-ring" startOffset="2">PENPIGEON PROCESSED</textPath></text>
+            <path d="M24 62H96M30 70H90" style="stroke:var(--blue)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div class="addr" aria-hidden="true">
+            <p>Alex Sample</p>
+            <p>123 Maple Street</p>
+            <p>Anytown, USA 00000</p>
+          </div>
+        </div>
+
+        <div class="postcard postcard--front">
+          <div class="plates photo" aria-hidden="true">
+            <svg class="plate plate--blue" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><use href="#ph-blue"/></svg>
+            <svg class="plate plate--pink" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><use href="#ph-pink"/></svg>
+            <svg class="plate plate--yellow" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><use href="#ph-yellow"/></svg>
+            <svg class="plate plate--black" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><use href="#ph-black"/></svg>
+          </div>
+        </div>
+        <figcaption class="sr-only">Sample postcard, front and back. The note on the back reads: Wish you were here. More soon, J.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="seam seam--blue" aria-hidden="true"><canvas class="ht" data-ink="blue" data-field="down" data-pitch="9" data-angle="15" data-grow="0"></canvas></div>
+
+  <!-- 3. HOW IT WORKS -->
+  <section class="spread how" id="how" aria-labelledby="how-title">
+    <div class="how__inner">
+      <h2 class="how__title misreg" id="how-title">How it works</h2>
+      <ol class="steps">
+        <li class="scrap step step--1">
+          <svg class="step__art" viewBox="0 0 140 110" aria-hidden="true" focusable="false">
+            <rect class="m" x="14" y="12" width="104" height="76" style="fill:var(--yellow)"/>
+            <circle class="m" cx="90" cy="38" r="17" style="fill:var(--pink)"/>
+            <path class="m" d="M14 88L50 42L74 70L92 54L118 88Z" style="fill:var(--blue)"/>
+            <rect x="14" y="12" width="104" height="76" fill="none" style="stroke:var(--ink)" stroke-width="3"/>
+            <path d="M92 100H116M108 94L116 100L108 106" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="step__no" aria-hidden="true">01</p>
+          <h3 class="step__t">Add a photo.</h3>
+          <p>It fills the front. Pan, zoom and straighten it. What you set is what prints.</p>
+        </li>
+        <li class="scrap step step--2">
+          <svg class="step__art" viewBox="0 0 140 110" aria-hidden="true" focusable="false">
+            <text class="m" x="8" y="80" font-size="88" font-family="Bagel Fat One, sans-serif" style="fill:var(--blue)">A</text>
+            <text class="m" x="68" y="80" font-size="72" font-family="Bagel Fat One, sans-serif" style="fill:var(--pink)">a</text>
+            <path d="M12 98C40 90 72 106 128 94" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <p class="step__no" aria-hidden="true">02</p>
+          <h3 class="step__t">Pick a handwriting.</h3>
+          <p>Use one of our styles, upload a font, or trace your own from a photo.</p>
+        </li>
+        <li class="scrap step step--3">
+          <svg class="step__art" viewBox="0 0 140 110" aria-hidden="true" focusable="false">
+            <rect class="m" x="10" y="22" width="108" height="24" style="fill:var(--yellow)"/>
+            <rect class="m" x="22" y="40" width="96" height="16" style="fill:var(--pink)"/>
+            <path d="M16 40C26 26 34 54 44 38S62 30 70 42S92 30 106 38" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M16 66C28 54 38 76 50 63S72 56 84 67S110 58 124 64" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M16 90C26 80 36 98 46 87S64 82 74 91" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <p class="step__no" aria-hidden="true">03</p>
+          <h3 class="step__t">Write the note.</h3>
+          <p>Type it. The pen adds a little wobble and uneven spacing, so no two cards come out exactly alike.</p>
+        </li>
+        <li class="scrap step step--4">
+          <svg class="step__art" viewBox="0 0 140 110" aria-hidden="true" focusable="false">
+            <rect class="m" x="12" y="16" width="112" height="78" style="fill:var(--yellow)"/>
+            <rect class="m" x="88" y="22" width="26" height="30" style="fill:var(--pink)"/>
+            <circle class="m" cx="84" cy="50" r="15" fill="none" style="stroke:var(--blue)" stroke-width="4"/>
+            <path d="M22 62H66M22 74H78M22 86H58" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round"/>
+            <rect x="12" y="16" width="112" height="78" fill="none" style="stroke:var(--ink)" stroke-width="3"/>
+          </svg>
+          <p class="step__no" aria-hidden="true">04</p>
+          <h3 class="step__t">Address it.</h3>
+          <p>Add their address, and yours if you want it on the back. Check it, then send it.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="seam seam--yellow" aria-hidden="true"><canvas class="ht" data-ink="yellow" data-field="up" data-pitch="9" data-angle="0" data-grow="0"></canvas></div>
+
+  <!-- 4. YOUR OWN HANDWRITING -->
+  <section class="spread spread--yellow hand" id="handwriting" aria-labelledby="hand-title">
+    <div class="hand__inner">
+      <div class="hand__copy">
+        <h2 class="hand__title misreg" id="hand-title">Use your own handwriting.</h2>
+        <p>Write a sentence that uses every letter of the alphabet, once normally and once in capitals, and photograph each. We find the letters and use them to write your cards, filling in any the pages missed.</p>
+      </div>
+      <div class="hand__sheets" role="img" aria-label="Sample pages: the sentence the quick brown fox jumps over the lazy dog, written once normally and once in capitals, with each letter boxed.">
+        <div class="sheet sheet--a" aria-hidden="true">
+          <p class="hw" data-hw="pink">the quick brown fox jumps over the lazy dog</p>
+          <span class="tape tape--a"></span>
+        </div>
+        <div class="sheet sheet--b" aria-hidden="true">
+          <p class="hw hw--caps" data-hw="blue">THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG</p>
+          <span class="tape tape--b"></span>
+        </div>
+        <svg class="staple staple--sheets" viewBox="0 0 44 14" aria-hidden="true"><use href="#staple"/></svg>
+        <p class="sheet__cap" aria-hidden="true">Sample pages</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="seam seam--yellow" aria-hidden="true"><canvas class="ht" data-ink="yellow" data-field="down" data-pitch="9" data-angle="0" data-grow="0"></canvas></div>
+
+  <!-- 5. PRICING -->
+  <section class="spread price" id="pricing" aria-labelledby="price-title">
+    <canvas class="ht price__sun" data-ink="yellow" data-field="radial" data-pitch="14" data-angle="0" data-grow="0.4" aria-hidden="true"></canvas>
+    <div class="price__inner">
+      <div class="price__head">
+        <h2 class="price__title" id="price-title"><span class="bignum" data-text="$4">$4</span> <span class="price__unit">a card.</span></h2>
+        <p class="price__lead">Building a card is free. You pay only when you send one.</p>
+      </div>
+      <div class="price__grid">
+        <article class="scrap ticket ticket--card">
+          <h3 class="ticket__t">What the $4 covers</h3>
+          <ul class="ticks">
+            <li>USPS postcard postage</li>
+            <li>A color print of your photo on the front</li>
+            <li>Your note, written on the back in ink</li>
+            <li>Stamped by hand and mailed</li>
+          </ul>
+        </article>
+        <article class="scrap ticket ticket--plan">
+          <h3 class="ticket__t">Post pigeon, <span class="nowrap">$9.99 a month</span></h3>
+          <p class="ticket__opt">An optional plan, for people who send often.</p>
+          <ul class="ticks">
+            <li>3 postcards a month, free</li>
+            <li>$1 off every card after that ($3 instead of $4)</li>
+            <li>Give it as a gift, they claim it by email</li>
+            <li>Cancel any time, it lasts through the month you paid for</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FAQ -->
+  <section class="spread faq" id="faq" aria-labelledby="faq-title">
+    <div class="faq__inner">
+      <div class="faq__side">
+        <h2 class="faq__title misreg" id="faq-title">Questions</h2>
+        <p class="faq__lead">Short answers.</p>
+        <div class="plates pigeon pigeon--faq">
+          <svg class="plate plate--blue" viewBox="0 0 480 400" focusable="false"><use href="#pg-blue"/></svg>
+          <svg class="plate plate--pink" viewBox="0 0 480 400" focusable="false"><use href="#pg-pink"/></svg>
+          <svg class="plate plate--yellow" viewBox="0 0 480 400" focusable="false"><use href="#pg-yellow"/></svg>
+          <svg class="plate plate--black" viewBox="0 0 480 400" focusable="false"><use href="#pg-black"/></svg>
+        </div>
+      </div>
+      <div class="faq__list">
+        <div class="qa is-open">
+          <h3 class="qa__h"><button class="qa__q" type="button" aria-expanded="true" aria-controls="qa-1" id="qq-1"><span>Is the note handwritten?</span><i class="qa__i" aria-hidden="true"></i></button></h3>
+          <div class="qa__a" id="qa-1" role="region" aria-labelledby="qq-1"><p>A machine draws your note on the card with a pen, following a path our software generates. It looks handwritten, but it isn&rsquo;t a person&rsquo;s hand.</p></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" type="button" aria-expanded="false" aria-controls="qa-2" id="qq-2"><span>How does the handwriting tracing work?</span><i class="qa__i" aria-hidden="true"></i></button></h3>
+          <div class="qa__a" id="qa-2" role="region" aria-labelledby="qq-2" hidden><p>Write a sentence that uses every letter of the alphabet, once in your normal handwriting and once in capitals, and photograph each one. The photos are uploaded, an algorithm finds your letters, and the photos are deleted. We then use your letters to write your cards.</p></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" type="button" aria-expanded="false" aria-controls="qa-3" id="qq-3"><span>How long does delivery take?</span><i class="qa__i" aria-hidden="true"></i></button></h3>
+          <div class="qa__a" id="qa-3" role="region" aria-labelledby="qq-3" hidden><p>Once it&rsquo;s in the mail, delivery is up to USPS, and we can&rsquo;t promise a date.</p></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" type="button" aria-expanded="false" aria-controls="qa-4" id="qq-4"><span>What does it cost?</span><i class="qa__i" aria-hidden="true"></i></button></h3>
+          <div class="qa__a" id="qa-4" role="region" aria-labelledby="qq-4" hidden><p>$4 a card. There&rsquo;s also an optional monthly plan.</p></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" type="button" aria-expanded="false" aria-controls="qa-5" id="qq-5"><span>Where will you mail it?</span><i class="qa__i" aria-hidden="true"></i></button></h3>
+          <div class="qa__a" id="qa-5" role="region" aria-labelledby="qq-5" hidden><p>Any address in the US.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="seam seam--pink" aria-hidden="true"><canvas class="ht" data-ink="pink" data-field="up" data-pitch="9" data-angle="75" data-grow="0"></canvas></div>
+
+  <!-- 7. CLOSING CTA -->
+  <section class="spread spread--pink cta" id="try" aria-labelledby="cta-title">
+    <canvas class="ht cta__dots" data-ink="yellow" data-field="radial" data-cx="0.92" data-cy="0.1" data-pitch="13" data-angle="0" data-grow="1" aria-hidden="true"></canvas>
+    <svg class="flight" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path id="flight-path" d="M-20 250C130 250 200 70 390 100S650 250 760 170S810 80 820 100" fill="none" style="stroke:var(--ink)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 13" vector-effect="non-scaling-stroke"/>
+    </svg>
+    <div class="plates pigeon pigeon--fly">
+          <svg class="plate plate--blue" viewBox="0 0 480 400" focusable="false"><use href="#pg-blue"/></svg>
+          <svg class="plate plate--pink" viewBox="0 0 480 400" focusable="false"><use href="#pg-pink"/></svg>
+          <svg class="plate plate--yellow" viewBox="0 0 480 400" focusable="false"><use href="#pg-yellow"/></svg>
+          <svg class="plate plate--black" viewBox="0 0 480 400" focusable="false"><use href="#pg-black"/></svg>
+        </div>
+    <div class="cta__inner">
+      <h2 class="cta__title misreg" id="cta-title">Try it before you pay.</h2>
+      <p class="cta__sub">Build a card and watch the note get written. You pay $4 only if you send it.</p>
+      <a class="btn btn--yellow" href="../../create.html"><span>Make one</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="contact">
+  <div class="foot__inner">
+    <div class="foot__brand">
+      <a class="brand" href="#top" aria-label="PenPigeon, back to top">
+        <svg class="brand__mark" viewBox="0 0 480 400" aria-hidden="true" focusable="false">
+          <use class="m" href="#pg-blue"/>
+          <use class="m b-pink" href="#pg-pink"/>
+          <use class="m b-yellow" href="#pg-yellow"/>
+          <use href="#pg-black"/>
+        </svg>
+        <span class="brand__word" translate="no">PenPigeon</span>
+      </a>
+      <p class="foot__tag">Send a photo as a postcard.</p>
+    </div>
+    <nav class="foot__links" aria-label="Footer">
+      <ul>
+        <li><a href="#top">Home</a></li>
+        <li><a href="../../create.html">Create</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="../../contact.html">Contact</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../terms.html">Terms</a></li>
+      </ul>
+    </nav>
+    <p class="foot__us">US addresses only.</p>
+  </div>
+</footer>
+
+<script src="../_shared/gsap/gsap.min.js"></script>
+<script src="../_shared/gsap/ScrollTrigger.min.js"></script>
+<script src="../_shared/gsap/SplitText.min.js"></script>
+<script src="../_shared/gsap/DrawSVGPlugin.min.js"></script>
+<script src="../_shared/gsap/MotionPathPlugin.min.js"></script>
+<script src="../_shared/gsap/CustomEase.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

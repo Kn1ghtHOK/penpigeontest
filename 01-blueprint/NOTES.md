@@ -1,0 +1,15 @@
+# 01 Plotter Blueprint
+
+**Concept.** The site is an engineering drawing set: seven numbered sheets on a cyanotype ground, with dimension lines, callout balloons, a revision table, a bill of materials and general notes. Scrolling is the drafting process, and the pen drawing the note is the product.
+
+**Palette.** Ground `#0b2f7e` (lamp falloff to `#08215f`, light spot `#0f3f9e`), two grid weights (24px / 96px) in pale cyan at 6% and 14%, linework `#d9f1ff`, ink `#eef9ff`, secondary text `#c6e3f8` / `#9fc6e8`. One accent, safety orange `#ff8a1f`, only for annotation, the live pen and the primary button (navy `#07194a` text).
+**Fonts.** Big Shoulders Display (lettering), IBM Plex Mono (labels, data, buttons), IBM Plex Sans (body). Google Fonts `<link>`, with condensed and mono fallbacks.
+
+**Signature moment (sheet 02, "Detail A").** The section pins for about 3.6 viewports and one scrubbed timeline draws the card: guide rect, centre lines, diagonals, registration marks, rulers and 6 IN x 4 IN dimensions (DrawSVG); the card outline resolves and the dimming construction layer steps back; then the real 40 strokes of `hero-message.svg` are drawn in order, each stroke's scroll share proportional to its true path length, orange while the pen is on it, white once laid. A nib reticle follows `getPointAtLength()` of the actual path, with live X/Y (inches on the 6x4 card), pen up/down (pen-up travel between strokes gets its own time), stroke count, crosshair lines to the rulers, and a revision table (A to D) that ticks off as each stage completes.
+GSAP: ScrollTrigger (pin, scrub, batch, once), DrawSVGPlugin, SplitText (lettered headings and H1), ScrambleTextPlugin (title-block sheet counter), `gsap.matchMedia` (reduced motion, desktop/mobile). Elsewhere: hero intro timeline draws the exploded isometric card on load; balloons pop and leaders draw on the assembly drawing; scrubbed letter-detection boxes into cells; row-by-row BOM; a revision cloud drawn round FAQ note 1; the pigeon mark drafted from construction circles.
+
+**Reduced motion / no JS.** Everything is the finished drawing, fully readable, note already written (checked with emulated `reduce`).
+**Checked.** 1440x900 and 390x844, widths 360 to 1920 with no horizontal scroll, no console errors.
+
+**To port.** Real pages for Create/Login/Contact/Privacy/Terms (links are dead relative paths); a light or print variant (this is dark only); a no-JS look for the fixed title block; the fonts self-hosted; real sample cards once they exist (all artwork here is drawn sample art and labelled as such); the nib/readout maths wired to the real `messageStrokes` rather than the sample SVG.
+**Known flaws.** The fixed corner title block can cover content at the bottom right while scrolling; the 3.5 IN note dimension and "Detail B" letter extraction are illustrative sample geometry, not a real extraction; the left ruler only shows at 1420px and wider; the iso hero uses a hand-built affine transform so text on its planes is slightly skewed; mobile hides small figure labels; Title Case from the guidelines audit was not applied because the brief's copy voice is sentence case.

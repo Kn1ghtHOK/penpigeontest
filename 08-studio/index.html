@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PenPigeon: Send a photo as a postcard</title>
+<meta name="description" content="Your photo goes on the front. A pen writes your note on the back. We stamp it and mail it. $4 a card, US addresses only.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f2f4f7">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23d93a14'/%3E%3Cpath fill='%23fff' d='M62 24.5 53.5 20.5C53 15 49.500 11.500 45 11.500 40 11.500 36.800 15 36.500 20 36.300 25 33 28.500 28 30.500 21 33 14 34.500 4 33.500L11.500 39 3.500 44.500C12 50 22 55 33 54 44 53 52 46 52.500 38 52.700 34 52 31.500 52.500 28.500L53.500 28.200Z' transform='translate(2 -4) scale(.94)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Onest:wght@400..700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Shared pigeon mark: head to the right, eye as a hole, wing line cut in --cut -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="pp-mark" viewBox="0 0 64 64">
+      <path fill="currentColor" fill-rule="evenodd" d="M62 24.5 53.5 20.5C53 15 49.500 11.500 45 11.500 40 11.500 36.800 15 36.500 20 36.300 25 33 28.500 28 30.500 21 33 14 34.500 4 33.500L11.500 39 3.500 44.500C12 50 22 55 33 54 44 54 52 46.500 52.500 38 52.700 34 52 31.500 52.500 28.500L53.500 28.200ZM47.500 17.100a1.900 1.900 0 1 0 0.010 0Z"/>
+      <path d="M19 40C26 33.500 37 33.500 46 41" fill="none" stroke="var(--cut, #fff)" stroke-width="2.200" stroke-linecap="round"/>
+      <path d="M28 53.500 27 60M36 53 37 60" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="PenPigeon, home">
+    <svg class="brand__mark" aria-hidden="true" focusable="false"><use href="#pp-mark"/></svg>
+    <span class="brand__name" translate="no">PenPigeon</span>
+  </a>
+  <nav class="nav__links" id="primary-nav" aria-label="Primary">
+    <a href="../../create.html">Create</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="../../contact.html">Contact</a>
+    <a class="nav__login nav__login--menu" href="../../login.html">Log in</a>
+  </nav>
+  <div class="nav__actions">
+    <a class="nav__login" href="../../login.html">Log in</a>
+    <span class="magnet"><a class="btn btn--primary btn--sm" href="../../create.html"><span class="btn__label">Make one</span></a></span>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ============ STAGE: hero, the card turning, and the price, in one pinned frame ============ -->
+  <div class="stage" id="top">
+    <div class="stage__light" aria-hidden="true"></div>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <h1 id="hero-title" data-split>Send a photo as a postcard.</h1>
+        <p class="sub hero__sub">Your photo goes on the front. A pen writes your note on the back. We stamp it and mail it.</p>
+        <div class="cta-row hero__cta">
+          <span class="magnet"><a class="btn btn--primary" href="../../create.html"><span class="btn__label">Make one</span></a></span>
+          <span class="magnet"><a class="btn btn--ghost" href="#how"><span class="btn__label">See how it&rsquo;s made</span></a></span>
+        </div>
+        <ul class="facts hero__facts" aria-label="At a glance">
+          <li>US&nbsp;mail only</li>
+          <li>$4&nbsp;a&nbsp;card</li>
+          <li>About 2&nbsp;min</li>
+        </ul>
+        <p class="hero__note">No account needed to try it.</p>
+      </div>
+    </section>
+
+    <div class="obj-wrap" id="object">
+      <div class="obj">
+        <div class="obj__lift" role="img" aria-label="A sample postcard. The front is a printed photo of a lake at sunset. The back has a pen-drawn note that reads: Wish you were here. More soon, J. A stamp and a postmark sit in the top corner.">
+          <div class="obj__tilt">
+            <div class="obj__float">
+              <div class="card">
+
+                <!-- FRONT: sample photo, drawn in SVG -->
+                <div class="face face--front">
+                  <svg class="photo" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+                    <defs>
+                      <linearGradient id="ph-sky" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#93b0d3"/>
+                        <stop offset=".4" stop-color="#cfd9e9"/>
+                        <stop offset=".66" stop-color="#f4dccb"/>
+                        <stop offset="1" stop-color="#f6bf9b"/>
+                      </linearGradient>
+                      <radialGradient id="ph-glow" cx="400" cy="222" r="250" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#ff8a4d" stop-opacity=".95"/>
+                        <stop offset=".28" stop-color="#ff9d68" stop-opacity=".5"/>
+                        <stop offset="1" stop-color="#ffb58a" stop-opacity="0"/>
+                      </radialGradient>
+                      <radialGradient id="ph-sun" cx=".5" cy=".5" r=".5">
+                        <stop offset="0" stop-color="#fff6e3"/>
+                        <stop offset=".6" stop-color="#ffb783"/>
+                        <stop offset="1" stop-color="#ff7a40"/>
+                      </radialGradient>
+                      <linearGradient id="ph-lake" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#efae8d"/>
+                        <stop offset=".18" stop-color="#a3b0c8"/>
+                        <stop offset=".6" stop-color="#586f95"/>
+                        <stop offset="1" stop-color="#2c4167"/>
+                      </linearGradient>
+                      <radialGradient id="ph-vig" cx=".5" cy=".5" r=".78">
+                        <stop offset=".55" stop-color="#0a1228" stop-opacity="0"/>
+                        <stop offset="1" stop-color="#0a1228" stop-opacity=".34"/>
+                      </radialGradient>
+                      <filter id="ph-grain" x="0" y="0" width="100%" height="100%">
+                        <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 .08  0 0 0 0 .1  0 0 0 0 .18  0 0 0 .9 -.34"/>
+                      </filter>
+                      <filter id="ph-soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3.2"/></filter>
+                      <filter id="ph-soft2" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.6"/></filter>
+                      <g id="ph-mtns">
+                        <path d="M0 240 L36 226 L66 234 L104 214 L140 232 L190 222 L236 240 L300 234 L350 242 L420 238 L470 228 L520 236 L560 222 L600 232 V256 H0Z" fill="#b6c3d8"/>
+                        <path d="M0 262 V176 L30 150 L58 172 L84 158 L128 214 L170 246 L210 262Z" fill="#7c91b2"/>
+                        <path d="M600 262 V192 L566 170 L540 188 L512 178 L470 228 L440 252 L420 262Z" fill="#687fa4"/>
+                        <path d="M0 262 V232 C40 226 70 240 110 252 C150 262 180 262 210 262Z" fill="#3a4d73"/>
+                      </g>
+                    </defs>
+                    <rect width="600" height="400" fill="url(#ph-sky)"/>
+                    <rect width="600" height="400" fill="url(#ph-glow)"/>
+                    <g fill="#fff" opacity=".6" filter="url(#ph-soft)">
+                      <ellipse cx="130" cy="90" rx="92" ry="7"/><ellipse cx="196" cy="108" rx="58" ry="5"/>
+                      <ellipse cx="478" cy="72" rx="82" ry="6"/><ellipse cx="530" cy="128" rx="62" ry="4.500"/>
+                      <ellipse cx="318" cy="176" rx="70" ry="4" opacity=".8"/>
+                    </g>
+                    <circle cx="400" cy="218" r="25" fill="url(#ph-sun)"/>
+                    <use href="#ph-mtns"/>
+                    <rect y="254" width="600" height="146" fill="url(#ph-lake)"/>
+                    <g opacity=".2" filter="url(#ph-soft2)"><use href="#ph-mtns" transform="translate(0 508) scale(1 -1)"/></g>
+                    <g fill="#ffb27a">
+                      <ellipse cx="400" cy="262" rx="30" ry="2.600" opacity=".9"/>
+                      <ellipse cx="400" cy="274" rx="23" ry="2.300" opacity=".75"/>
+                      <ellipse cx="400" cy="288" rx="17" ry="2" opacity=".6"/>
+                      <ellipse cx="400" cy="304" rx="12" ry="1.800" opacity=".45"/>
+                      <ellipse cx="400" cy="324" rx="8" ry="1.500" opacity=".32"/>
+                    </g>
+                    <g stroke="#fff" stroke-width="1" opacity=".16" fill="none">
+                      <path d="M20 268 H150M240 278 H340M470 270 H590M60 296 H210M300 310 H470M520 300 H600M120 330 H300"/>
+                    </g>
+                    <g>
+                      <path d="M158 284 L196 284 L189 291 L165 291Z" fill="#17223f"/>
+                      <path d="M177 254 V284" stroke="#17223f" stroke-width="1.400"/>
+                      <path d="M175 256 V282 L156 282Z" fill="#f7dcc6"/>
+                      <path d="M180 260 V282 L194 282Z" fill="#e6a07f"/>
+                      <path d="M158 294 L196 294" stroke="#17223f" stroke-width="2" opacity=".25"/>
+                    </g>
+                    <g fill="none" stroke="#2a3552" stroke-width="1.500" stroke-linecap="round">
+                      <path d="M286 118 q6 -6 12 0 q6 -6 12 0"/><path d="M322 104 q5 -5 10 0 q5 -5 10 0"/><path d="M262 138 q4 -4 8 0 q4 -4 8 0"/>
+                    </g>
+                    <path d="M600 400 V298 L590 308 L593 294 L582 306 L585 284 L573 304 L576 288 L563 312 L568 400Z" fill="#111a33"/>
+                    <path d="M600 400 V318 L606 318Z M544 400 V330 L552 346 L550 332 L558 352 L560 400Z" fill="#111a33"/>
+                    <path d="M0 400 V372 C80 358 164 380 244 392 L262 400Z" fill="#0f1830"/>
+                    <rect width="600" height="400" filter="url(#ph-grain)" opacity=".55"/>
+                    <rect width="600" height="400" fill="url(#ph-vig)"/>
+                  </svg>
+                  <i class="anchor" data-anchor="print" style="left:66.500%;top:54.500%"></i>
+                  <div class="sheen"><i></i></div>
+                  <div class="shade"></div>
+                </div>
+
+                <!-- BACK: note, address, stamp, postmark -->
+                <div class="face face--back">
+                  <div class="back__divider"></div>
+                  <svg class="note" viewBox="0 0 563.2 175.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <g class="note__paths"><path d="M 10.52,47.95 L 6.56,46.09 L 4.56,41.86 L 4.76,39.98 L 6.66,35.78 L 10.72,33.95 L 12.79,33.72 L 16.76,36.06 L 18.49,40.16 L 18.26,46.08 L 15.73,76.23" stroke-width="2.11"/>
+<path d="M 36.72,33.94 L 15.85,76.38" stroke-width="1.97"/>
+<path d="M 36.93,34.18 L 32.28,76.36" stroke-width="1.77"/>
+<path d="M 61.21,34.51 L 57.01,36.59 L 50.77,42.47 L 44.80,50.68 L 38.58,62.53 L 32.21,76.51" stroke-width="1.78"/>
+<path d="M 71.83,47.84 L 71.91,49.70 L 73.60,49.64 L 73.60,47.79 L 71.69,48.01" stroke-width="1.78"/>
+<path d="M 65.15,65.98 L 69.28,58.13 L 64.71,69.89 L 64.79,73.64 L 66.95,75.78 L 69.04,75.83 L 73.00,73.91 L 75.01,71.94 L 79.26,66.04" stroke-width="1.96"/>
+<path d="M 83.24,66.36 L 87.34,60.44 L 89.50,56.51 L 89.63,60.41 L 93.53,67.00 L 95.26,71.42 L 95.03,75.57 L 91.00,77.26" stroke-width="1.94"/>
+<path d="M 82.61,74.98 L 86.70,77.01 L 95.16,77.51 L 99.32,75.66 L 101.46,73.37 L 106.05,67.23" stroke-width="1.75"/>
+<path d="M 109.92,66.37 L 113.99,60.23 L 120.55,50.51 L 122.59,46.43 L 124.78,40.24 L 124.83,36.56 L 122.99,34.68 L 118.74,36.30 L 116.69,40.18 L 114.38,48.23 L 111.94,60.45 L 109.35,76.50" stroke-width="2.17"/>
+<path d="M 109.31,76.52 L 111.66,70.55 L 113.89,66.44 L 118.05,60.45 L 122.12,58.71 L 126.09,58.70 L 128.23,60.77 L 127.92,64.81 L 125.54,70.95 L 125.40,75.03 L 127.44,77.25 L 129.77,77.45 L 133.85,75.31 L 136.13,73.39 L 140.49,67.65" stroke-width="1.96"/>
+<path d="M 168.26,66.43 L 172.12,58.09 L 168.41,70.57 L 168.19,74.36 L 170.18,76.38 L 174.49,76.41 L 178.84,74.34 L 182.85,70.17 L 186.94,63.79" stroke-width="1.91"/>
+<path d="M 188.71,57.63 L 177.23,94.97 L 175.41,99.17 L 171.11,101.46 L 168.77,99.27 L 168.48,94.90 L 170.59,88.81 L 176.91,82.63 L 182.94,78.36 L 186.82,75.99 L 192.80,71.47 L 198.85,65.17" stroke-width="2.01"/>
+<path d="M 214.61,56.77 L 210.38,56.90 L 206.18,59.10 L 204.04,61.17 L 202.08,65.48 L 202.24,69.87 L 204.57,74.11 L 208.69,75.93 L 212.84,76.17 L 216.95,74.10 L 219.14,71.83 L 221.07,67.62 L 220.88,63.20 L 218.68,59.06 L 214.55,56.77 L 212.78,59.13 L 212.93,63.52 L 215.13,67.81 L 219.42,69.57 L 225.58,69.21 L 229.64,66.93 L 231.93,64.92" stroke-width="2.01"/>
+<path d="M 234.64,64.69 L 238.43,56.68 L 234.77,68.81 L 234.76,73.07 L 237.00,75.11 L 241.02,75.13 L 244.90,72.91 L 249.05,68.73 L 253.09,62.51" stroke-width="2.00"/>
+<path d="M 255.22,56.55 L 251.29,68.66 L 251.28,72.80 L 253.42,74.71 L 255.52,74.58 L 259.61,72.47 L 261.38,70.45 L 265.49,64.33" stroke-width="2.15"/>
+<path d="M 296.63,56.11 L 292.40,60.21 L 290.10,66.18 L 290.03,70.58 L 291.86,74.76 L 295.75,74.89 L 300.25,73.03 L 304.50,68.93" stroke-width="2.04"/>
+<path d="M 309.25,56.54 L 304.31,68.75 L 304.00,72.80 L 306.07,75.24 L 310.51,75.49 L 314.55,73.30 L 318.86,69.45 L 321.17,63.43 L 321.57,57.30" stroke-width="2.16"/>
+<path d="M 321.53,56.98 L 323.41,65.30 L 325.42,67.42 L 329.49,67.76 L 333.81,65.83" stroke-width="2.02"/>
+<path d="M 339.28,72.08 L 343.38,70.18 L 345.42,68.59 L 347.72,64.79 L 347.83,60.76 L 345.72,58.72 L 343.99,58.50 L 339.78,60.47 L 337.71,64.16 L 337.33,70.33 L 339.27,74.56 L 343.43,76.61 L 347.66,76.53 L 351.47,74.72 L 353.64,72.65 L 357.97,66.71" stroke-width="1.81"/>
+<path d="M 361.20,64.78 L 365.15,58.33 L 367.33,53.69 L 367.24,57.98 L 374.02,57.98 L 376.16,60.26 L 376.31,64.40 L 374.40,71.04 L 374.30,73.40 L 376.40,75.29 L 378.95,75.13 L 383.24,72.91 L 385.43,70.70 L 389.71,63.88" stroke-width="2.21"/>
+<path d="M 395.02,69.95 L 399.19,67.85 L 401.16,65.91 L 403.37,61.52 L 403.35,57.19 L 401.07,55.10 L 398.86,55.26 L 394.85,57.38 L 392.90,61.38 L 392.90,67.90 L 395.01,72.23 L 399.29,74.37 L 403.63,74.15 L 408.03,71.86 L 410.23,69.71 L 414.42,63.52" stroke-width="2.18"/>
+<path d="M 442.27,67.15 L 446.18,61.19 L 452.25,51.05 L 454.28,47.20 L 456.40,41.42 L 456.24,37.16 L 454.37,35.03 L 450.28,37.15 L 448.31,41.24 L 446.32,49.42 L 444.38,61.56 L 442.60,77.60" stroke-width="2.13"/>
+<path d="M 442.68,77.59 L 444.31,71.25 L 446.50,67.01 L 450.33,61.30 L 454.33,59.41 L 458.15,59.49 L 460.11,61.58 L 460.20,65.28 L 458.03,71.16 L 458.20,74.92 L 460.01,76.87 L 462.12,76.90 L 466.17,75.22 L 468.10,73.33 L 472.18,67.02" stroke-width="2.07"/>
+<path d="M 477.42,71.96 L 481.72,69.88 L 483.83,67.89 L 486.29,63.63 L 486.38,59.32 L 484.35,57.43 L 482.15,57.42 L 478.04,59.30 L 475.77,63.26 L 475.73,69.44 L 477.63,73.89 L 481.65,76.16 L 485.80,76.50 L 490.11,74.23 L 491.95,72.07 L 496.56,65.82" stroke-width="1.76"/>
+<path d="M 499.51,66.58 L 503.44,60.57 L 505.60,56.79 L 505.30,60.83 L 511.35,61.06 L 513.37,62.94 L 513.36,66.83 L 511.34,72.59 L 511.11,74.74 L 513.24,76.63 L 515.41,76.91 L 519.27,74.96 L 521.15,73.02 L 525.42,67.25" stroke-width="2.07"/>
+<path d="M 531.28,71.72 L 535.66,69.80 L 537.92,67.58 L 540.02,63.72 L 540.29,59.56 L 538.39,57.39 L 536.38,57.31 L 532.05,59.24 L 529.61,63.21 L 529.60,69.46 L 531.30,73.63 L 535.20,75.79 L 539.12,75.99 L 543.53,74.18 L 545.61,72.37 L 549.91,66.50" stroke-width="1.95"/>
+<path d="M 555.49,65.46 L 553.09,67.65 L 555.22,69.67 L 557.22,67.39 L 555.34,65.21" stroke-width="1.76"/>
+<path d="M 9.60,121.49 L 5.36,119.63 L 3.22,115.75 L 2.98,113.49 L 4.94,109.56 L 9.24,107.58 L 11.25,107.25 L 15.46,109.24 L 17.69,113.46 L 17.67,117.38 L 15.68,127.81 L 13.92,135.77 L 9.96,150.35" stroke-width="1.79"/>
+<path d="M 13.83,135.89 L 19.67,119.59 L 23.59,111.28 L 25.60,109.28 L 29.82,106.79 L 31.66,106.94 L 35.74,108.90 L 37.93,112.82 L 37.95,116.80 L 36.11,127.14 L 34.50,135.52 L 30.59,149.88" stroke-width="1.98"/>
+<path d="M 34.37,135.51 L 40.16,118.88 L 44.29,110.44 L 46.15,108.15 L 49.97,105.90 L 51.86,105.93 L 56.23,108.01 L 58.35,112.06 L 58.71,116.33 L 56.79,126.51 L 53.13,140.84 L 53.24,146.91 L 55.08,149.16 L 57.10,148.90 L 61.41,146.60 L 63.47,144.67 L 67.11,138.56" stroke-width="2.16"/>
+<path d="M 83.90,130.26 L 79.72,129.97 L 75.46,132.03 L 73.29,133.89 L 71.32,138.25 L 70.96,142.27 L 72.74,146.71 L 77.04,149.21 L 81.36,149.48 L 85.40,147.54 L 87.58,145.59 L 89.68,141.13 L 90.07,137.18 L 88.33,132.73 L 83.97,130.25 L 82.03,132.44 L 81.85,136.43 L 83.76,140.87 L 87.91,142.90 L 94.23,143.12 L 98.36,141.26 L 100.23,139.24" stroke-width="2.17"/>
+<path d="M 102.86,138.06 L 106.97,131.59 L 109.29,127.21 L 109.25,131.36 L 115.69,130.85 L 118.08,133.01 L 118.32,137.45 L 116.44,143.80 L 116.69,146.13 L 118.92,148.18 L 121.15,147.98 L 125.26,145.52 L 127.50,143.24 L 131.33,136.76" stroke-width="2.03"/>
+<path d="M 136.68,145.26 L 140.82,143.32 L 142.89,141.44 L 145.03,137.20 L 145.00,132.84 L 142.76,130.92 L 140.57,130.79 L 136.65,133.19 L 134.49,137.54 L 134.72,143.46 L 136.73,147.79 L 140.74,149.75 L 145.05,149.58 L 149.24,147.39 L 151.44,145.10 L 155.60,139.04" stroke-width="1.96"/>
+<path d="M 180.46,139.69 L 184.21,133.38 L 186.00,129.46 L 186.00,133.59 L 190.36,139.50 L 192.47,143.55 L 192.67,147.46 L 188.83,149.76" stroke-width="2.09"/>
+<path d="M 180.72,147.81 L 184.70,149.77 L 193.04,149.48 L 196.91,147.34 L 198.76,145.39 L 202.64,139.06" stroke-width="2.05"/>
+<path d="M 219.70,132.94 L 215.27,133.01 L 210.73,134.79 L 208.59,136.73 L 206.10,141.27 L 205.89,145.55 L 207.89,150.01 L 212.57,152.39 L 217.04,152.74 L 221.58,150.53 L 223.91,148.37 L 225.99,143.88 L 226.21,139.74 L 224.30,135.30 L 219.75,133.05 L 217.55,135.04 L 217.57,139.60 L 219.58,144.07 L 223.81,146.55 L 230.27,146.87 L 234.86,144.45 L 237.23,142.43" stroke-width="2.14"/>
+<path d="M 252.93,132.74 L 248.50,132.78 L 244.02,134.81 L 242.21,137.20 L 240.11,141.38 L 239.95,145.35 L 242.32,149.50 L 246.40,151.89 L 250.70,151.67 L 254.78,149.40 L 256.76,147.53 L 259.14,143.33 L 258.99,139.18 L 256.67,134.94 L 252.47,132.85 L 250.35,134.91 L 250.43,139.10 L 252.69,143.14 L 257.02,145.41 L 263.36,145.14 L 267.43,142.89 L 269.71,140.65" stroke-width="1.99"/>
+<path d="M 272.99,138.51 L 276.75,132.67 L 280.77,130.71 L 282.91,132.96 L 282.67,134.62 L 280.86,142.79 L 278.82,148.55" stroke-width="1.87"/>
+<path d="M 280.65,142.77 L 282.66,138.58 L 286.57,132.71 L 290.73,130.84 L 294.94,130.80 L 297.02,132.97 L 296.99,137.05 L 294.81,142.76 L 294.55,146.74 L 296.66,148.61 L 298.90,148.88 L 302.92,147.05 L 304.69,145.06 L 308.47,138.84" stroke-width="1.99"/>
+<path d="M 401.90,159.13 L 397.43,152.42 L 393.13,141.57 L 391.05,128.46 L 391.16,115.40 L 393.45,108.53 L 397.79,106.26 L 402.53,106.62 L 404.62,108.70 L 406.98,115.41 L 406.73,121.85 L 404.31,132.82 L 397.85,152.55 L 393.47,165.76 L 391.25,172.32 L 388.81,176.46 L 384.37,178.47 L 382.44,176.14 L 382.43,172.01 L 384.53,165.66 L 389.18,159.16 L 393.35,154.57 L 399.96,150.45 L 408.71,146.23" stroke-width="1.77"/></g>
+                    <circle class="pen" cx="10" cy="40" r="5.500"/>
+                  </svg>
+                  <div class="back__brand" aria-hidden="true">
+                    <svg class="back__mark" focusable="false"><use href="#pp-mark"/></svg>
+                    <span>PenPigeon</span>
+                  </div>
+                  <div class="back__addr" aria-hidden="true">
+                    <span>June Marlowe</span>
+                    <span>14 Alder Street</span>
+                    <span>Duluth, MN 55802</span>
+                  </div>
+                  <svg class="cancel" viewBox="0 0 160 60" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" aria-hidden="true" focusable="false">
+                    <path d="M2 8 q10 -7 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"/>
+                    <path d="M2 21 q10 -7 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"/>
+                    <path d="M2 34 q10 -7 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"/>
+                    <path d="M2 47 q10 -7 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0"/>
+                  </svg>
+                  <svg class="postmark" viewBox="0 0 100 100" fill="none" stroke="currentColor" aria-hidden="true" focusable="false">
+                    <circle cx="50" cy="50" r="45" stroke-width="2.400"/>
+                    <circle cx="50" cy="50" r="34" stroke-width="1.300"/>
+                    <path id="pm-arc" d="M12.500 50 A37.500 37.500 0 0 1 87.500 50" stroke="none"/>
+                    <text font-size="8.300" font-weight="700" letter-spacing=".9" fill="currentColor" stroke="none"><textPath href="#pm-arc" startOffset="50%" text-anchor="middle">PENPIGEON PROCESSED</textPath></text>
+                    <path d="M16 62 H84" stroke-width="1.200"/>
+                    <use href="#pp-mark" x="33" y="33" width="34" height="34" fill="currentColor" stroke="none" style="--cut:var(--card-paper)"/>
+                  </svg>
+                  <div class="stamp" aria-hidden="true">
+                    <svg viewBox="0 0 100 118" focusable="false">
+                      <defs>
+                        <pattern id="st-ph" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="0" r="3.300" fill="#000"/></pattern>
+                        <pattern id="st-pv" width="10" height="11.800" patternUnits="userSpaceOnUse"><circle cx="0" cy="5.900" r="3.300" fill="#000"/></pattern>
+                        <mask id="st-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="118">
+                          <rect width="100" height="118" fill="#fff"/>
+                          <rect x="0" y="-3.300" width="100" height="6.600" fill="url(#st-ph)"/>
+                          <rect x="0" y="114.700" width="100" height="6.600" fill="url(#st-ph)" transform="translate(0 0)"/>
+                          <rect x="-3.300" y="0" width="6.600" height="118" fill="url(#st-pv)"/>
+                          <rect x="96.700" y="0" width="6.600" height="118" fill="url(#st-pv)"/>
+                        </mask>
+                      </defs>
+                      <g mask="url(#st-mask)">
+                        <rect width="100" height="118" fill="var(--accent)"/>
+                        <rect x="8" y="8" width="84" height="102" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.200"/>
+                        <use href="#pp-mark" x="19" y="22" width="62" height="62" fill="#fff" style="--cut:var(--accent)" color="#fff"/>
+                        <text x="50" y="100" text-anchor="middle" font-size="9.500" font-weight="700" letter-spacing="1.800" fill="#fff">POSTCARD</text>
+                        <text x="15" y="21" font-size="8.500" font-weight="700" letter-spacing="1" fill="#fff" opacity=".9">USA</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <i class="shock" aria-hidden="true"></i>
+                  <i class="anchor" data-anchor="ink" style="left:21%;top:36%"></i>
+                  <i class="anchor" data-anchor="postage" style="left:93.500%;top:12%"></i>
+                  <i class="anchor" data-anchor="stamped" style="left:74.500%;top:33.500%"></i>
+                  <div class="sheen"><i></i></div>
+                  <div class="shade"></div>
+                </div>
+
+                <i class="edge edge--r"></i><i class="edge edge--l"></i><i class="edge edge--t"></i><i class="edge edge--b"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="obj__shadow" aria-hidden="true"></div>
+        <p class="obj__caption">Sample card. The photo and note are examples.</p>
+      </div>
+      <button class="flip" type="button" aria-pressed="false">Show the front</button>
+    </div>
+
+    <!-- Callouts attach to parts of the card during the pinned turn (desktop) -->
+    <div class="callouts" aria-hidden="true">
+      <svg class="callouts__svg" focusable="false">
+        <g fill="none" stroke="var(--accent)" stroke-width="1.250" stroke-linejoin="round">
+          <path id="cl-print" pathLength="1"/><path id="cl-ink" pathLength="1"/><path id="cl-postage" pathLength="1"/><path id="cl-stamped" pathLength="1"/>
+        </g>
+        <g fill="var(--accent)" stroke="#fff" stroke-width="1.500">
+          <circle id="cd-print" r="4.500"/><circle id="cd-ink" r="4.500"/><circle id="cd-postage" r="4.500"/><circle id="cd-stamped" r="4.500"/>
+        </g>
+      </svg>
+      <div class="callout callout--r callout--print" data-key="print"><strong>Colour print</strong><span>Your photo fills the front.</span></div>
+      <div class="callout callout--l callout--ink" data-key="ink"><strong>Drawn in ink</strong><span>A pen draws your note along a path our software makes.</span></div>
+      <div class="callout callout--r callout--postage" data-key="postage"><strong>USPS postage</strong><span>Postcard postage is part of the $4.</span></div>
+      <div class="callout callout--r callout--stamped" data-key="stamped"><strong>Stamped by hand</strong><span>Each card is stamped by hand, then mailed.</span></div>
+    </div>
+
+    <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+      <div class="pricing__copy">
+        <h2 id="pricing-title" class="pricing__title" data-p>$4 a card.</h2>
+        <p class="sub pricing__sub" data-p>Building a card is free. You pay only when you send one.</p>
+      </div>
+      <div class="pricing__table">
+        <h3 class="pricing__cap" data-p>What the $4 covers</h3>
+        <dl class="spec">
+          <div class="spec__row" data-p><dt class="spec__k">Front</dt><dd class="spec__v">A color print of your photo</dd></div>
+          <div class="spec__row" data-p><dt class="spec__k">Back</dt><dd class="spec__v">Your note, written in ink</dd></div>
+          <div class="spec__row" data-p><dt class="spec__k">Postage</dt><dd class="spec__v">USPS postcard postage</dd></div>
+          <div class="spec__row" data-p><dt class="spec__k">Finish</dt><dd class="spec__v">Stamped by hand and mailed</dd></div>
+        </dl>
+        <div class="cta-row pricing__cta" data-p>
+          <span class="magnet"><a class="btn btn--primary" href="../../create.html"><span class="btn__label">Make one</span></a></span>
+          <a class="textlink" href="#post-pigeon">See the monthly plan</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="stage__progress" aria-hidden="true"><i></i></div>
+  </div>
+
+  <!-- ============ HOW IT WORKS: hairline spec table ============ -->
+  <section class="how" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 id="how-title" class="h2" data-split>How it works</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__rule" aria-hidden="true"></span>
+          <span class="step__n">01</span>
+          <h3 class="step__t">Add a photo.</h3>
+          <p class="step__p">It fills the front. Pan, zoom and straighten it. What you set is what prints.</p>
+          <svg class="fig" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="1.250" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <rect x="24" y="16" width="192" height="118" rx="3"/>
+            <path class="fig__soft" d="M24 118 L74 70 L104 98 L146 52 L216 120"/>
+            <g class="fig__hot" transform="rotate(-6 120 81)">
+              <rect x="52" y="36" width="136" height="90"/>
+              <rect x="49" y="33" width="6" height="6" fill="var(--bg)"/><rect x="185" y="33" width="6" height="6" fill="var(--bg)"/>
+              <rect x="49" y="123" width="6" height="6" fill="var(--bg)"/><rect x="185" y="123" width="6" height="6" fill="var(--bg)"/>
+            </g>
+            <path class="fig__hot" d="M196 20 A26 26 0 0 1 222 46 M222 46 l-4.500 -5.500 M222 46 l5.500 -4"/>
+          </svg>
+        </li>
+        <li class="step">
+          <span class="step__rule" aria-hidden="true"></span>
+          <span class="step__n">02</span>
+          <h3 class="step__t">Pick a handwriting.</h3>
+          <p class="step__p">Use one of our styles, upload a font, or trace your own from a photo.</p>
+          <svg class="fig" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="1.250" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M28 32 c10 -20 18 -20 24 0 s14 20 24 0 s14 -20 24 0 s14 20 24 0 s14 -20 24 0"/>
+            <path d="M28 74 h16 v-14 h16 v28 h16 v-28 h16 v28 h16 v-28 h16 v28 h16 v-14"/>
+            <g class="fig__hot">
+              <path d="M28 118 c4 -14 9 -20 11 -6 c2 12 7 12 10 -4 c3 -14 9 -10 11 2 c2 10 8 8 12 -5 c4 -12 10 -8 12 5 c2 12 10 8 14 -3 c3 -8 8 -10 12 -2 c3 6 9 6 12 -2"/>
+              <path d="M18 100 v-8 h8 M222 100 v-8 h-8 M18 134 v8 h8 M222 134 v8 h-8"/>
+            </g>
+          </svg>
+        </li>
+        <li class="step">
+          <span class="step__rule" aria-hidden="true"></span>
+          <span class="step__n">03</span>
+          <h3 class="step__t">Write the note.</h3>
+          <p class="step__p">Type it. The pen adds a little wobble and uneven spacing, so no two cards come out exactly alike.</p>
+          <svg class="fig" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="1.250" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path class="fig__soft" d="M16 50 H224 M16 106 H224" stroke-dasharray="3 5"/>
+            <path d="M28 106 c5 -50 14 -50 18 0 c4 -36 12 -36 16 0 c3 -24 10 -24 14 0 c6 -46 14 -46 20 0 c4 -30 12 -30 16 0 c3 -20 8 -20 12 0 c5 -36 12 -36 17 0"/>
+            <path class="fig__hot" transform="translate(3 -4) rotate(-1.800 120 106)" d="M28 106 c5 -50 14 -50 18 0 c4 -36 12 -36 16 0 c3 -24 10 -24 14 0 c6 -46 14 -46 20 0 c4 -30 12 -30 16 0 c3 -20 8 -20 12 0 c5 -36 12 -36 17 0"/>
+          </svg>
+        </li>
+        <li class="step">
+          <span class="step__rule" aria-hidden="true"></span>
+          <span class="step__n">04</span>
+          <h3 class="step__t">Address it.</h3>
+          <p class="step__p">Add their address, and yours if you want it on the back. Check it, then send it.</p>
+          <svg class="fig" viewBox="0 0 240 150" fill="none" stroke="currentColor" stroke-width="1.250" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <rect x="20" y="20" width="200" height="110" rx="3"/>
+            <path class="fig__soft" d="M122 32 V118"/>
+            <path d="M138 84 h62 M138 98 h50 M138 112 h58"/>
+            <path class="fig__soft" d="M34 38 h42 M34 50 h30"/>
+            <g class="fig__hot"><rect x="178" y="30" width="28" height="34" stroke-dasharray="2.500 3"/><path d="M185 56 l5 -12 l5 12 M187 52 h6"/></g>
+          </svg>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ OWN HANDWRITING ============ -->
+  <section class="hand" id="handwriting" aria-labelledby="hand-title">
+    <div class="wrap">
+      <h2 id="hand-title" class="h2" data-split>Use your own handwriting.</h2>
+      <p class="lede" data-reveal>Write a sentence that uses every letter of the alphabet, once normally and once in capitals, and photograph each. We find the letters and use them to write your cards, filling in any the pages missed.</p>
+
+      <figure class="trace" aria-label="An illustration of the three steps: a photographed note, the letters found in it, and the note written as ink.">
+        <div class="trace__stage">
+          <div class="trace__sheet">
+            <svg class="trace__svg" viewBox="0 0 563.2 175.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <g class="trace__boxes"></g>
+              <g class="trace__ink"><path d="M 10.52,47.95 L 6.56,46.09 L 4.56,41.86 L 4.76,39.98 L 6.66,35.78 L 10.72,33.95 L 12.79,33.72 L 16.76,36.06 L 18.49,40.16 L 18.26,46.08 L 15.73,76.23" stroke-width="2.11"/>
+<path d="M 36.72,33.94 L 15.85,76.38" stroke-width="1.97"/>
+<path d="M 36.93,34.18 L 32.28,76.36" stroke-width="1.77"/>
+<path d="M 61.21,34.51 L 57.01,36.59 L 50.77,42.47 L 44.80,50.68 L 38.58,62.53 L 32.21,76.51" stroke-width="1.78"/>
+<path d="M 71.83,47.84 L 71.91,49.70 L 73.60,49.64 L 73.60,47.79 L 71.69,48.01" stroke-width="1.78"/>
+<path d="M 65.15,65.98 L 69.28,58.13 L 64.71,69.89 L 64.79,73.64 L 66.95,75.78 L 69.04,75.83 L 73.00,73.91 L 75.01,71.94 L 79.26,66.04" stroke-width="1.96"/>
+<path d="M 83.24,66.36 L 87.34,60.44 L 89.50,56.51 L 89.63,60.41 L 93.53,67.00 L 95.26,71.42 L 95.03,75.57 L 91.00,77.26" stroke-width="1.94"/>
+<path d="M 82.61,74.98 L 86.70,77.01 L 95.16,77.51 L 99.32,75.66 L 101.46,73.37 L 106.05,67.23" stroke-width="1.75"/>
+<path d="M 109.92,66.37 L 113.99,60.23 L 120.55,50.51 L 122.59,46.43 L 124.78,40.24 L 124.83,36.56 L 122.99,34.68 L 118.74,36.30 L 116.69,40.18 L 114.38,48.23 L 111.94,60.45 L 109.35,76.50" stroke-width="2.17"/>
+<path d="M 109.31,76.52 L 111.66,70.55 L 113.89,66.44 L 118.05,60.45 L 122.12,58.71 L 126.09,58.70 L 128.23,60.77 L 127.92,64.81 L 125.54,70.95 L 125.40,75.03 L 127.44,77.25 L 129.77,77.45 L 133.85,75.31 L 136.13,73.39 L 140.49,67.65" stroke-width="1.96"/>
+<path d="M 168.26,66.43 L 172.12,58.09 L 168.41,70.57 L 168.19,74.36 L 170.18,76.38 L 174.49,76.41 L 178.84,74.34 L 182.85,70.17 L 186.94,63.79" stroke-width="1.91"/>
+<path d="M 188.71,57.63 L 177.23,94.97 L 175.41,99.17 L 171.11,101.46 L 168.77,99.27 L 168.48,94.90 L 170.59,88.81 L 176.91,82.63 L 182.94,78.36 L 186.82,75.99 L 192.80,71.47 L 198.85,65.17" stroke-width="2.01"/>
+<path d="M 214.61,56.77 L 210.38,56.90 L 206.18,59.10 L 204.04,61.17 L 202.08,65.48 L 202.24,69.87 L 204.57,74.11 L 208.69,75.93 L 212.84,76.17 L 216.95,74.10 L 219.14,71.83 L 221.07,67.62 L 220.88,63.20 L 218.68,59.06 L 214.55,56.77 L 212.78,59.13 L 212.93,63.52 L 215.13,67.81 L 219.42,69.57 L 225.58,69.21 L 229.64,66.93 L 231.93,64.92" stroke-width="2.01"/>
+<path d="M 234.64,64.69 L 238.43,56.68 L 234.77,68.81 L 234.76,73.07 L 237.00,75.11 L 241.02,75.13 L 244.90,72.91 L 249.05,68.73 L 253.09,62.51" stroke-width="2.00"/>
+<path d="M 255.22,56.55 L 251.29,68.66 L 251.28,72.80 L 253.42,74.71 L 255.52,74.58 L 259.61,72.47 L 261.38,70.45 L 265.49,64.33" stroke-width="2.15"/>
+<path d="M 296.63,56.11 L 292.40,60.21 L 290.10,66.18 L 290.03,70.58 L 291.86,74.76 L 295.75,74.89 L 300.25,73.03 L 304.50,68.93" stroke-width="2.04"/>
+<path d="M 309.25,56.54 L 304.31,68.75 L 304.00,72.80 L 306.07,75.24 L 310.51,75.49 L 314.55,73.30 L 318.86,69.45 L 321.17,63.43 L 321.57,57.30" stroke-width="2.16"/>
+<path d="M 321.53,56.98 L 323.41,65.30 L 325.42,67.42 L 329.49,67.76 L 333.81,65.83" stroke-width="2.02"/>
+<path d="M 339.28,72.08 L 343.38,70.18 L 345.42,68.59 L 347.72,64.79 L 347.83,60.76 L 345.72,58.72 L 343.99,58.50 L 339.78,60.47 L 337.71,64.16 L 337.33,70.33 L 339.27,74.56 L 343.43,76.61 L 347.66,76.53 L 351.47,74.72 L 353.64,72.65 L 357.97,66.71" stroke-width="1.81"/>
+<path d="M 361.20,64.78 L 365.15,58.33 L 367.33,53.69 L 367.24,57.98 L 374.02,57.98 L 376.16,60.26 L 376.31,64.40 L 374.40,71.04 L 374.30,73.40 L 376.40,75.29 L 378.95,75.13 L 383.24,72.91 L 385.43,70.70 L 389.71,63.88" stroke-width="2.21"/>
+<path d="M 395.02,69.95 L 399.19,67.85 L 401.16,65.91 L 403.37,61.52 L 403.35,57.19 L 401.07,55.10 L 398.86,55.26 L 394.85,57.38 L 392.90,61.38 L 392.90,67.90 L 395.01,72.23 L 399.29,74.37 L 403.63,74.15 L 408.03,71.86 L 410.23,69.71 L 414.42,63.52" stroke-width="2.18"/>
+<path d="M 442.27,67.15 L 446.18,61.19 L 452.25,51.05 L 454.28,47.20 L 456.40,41.42 L 456.24,37.16 L 454.37,35.03 L 450.28,37.15 L 448.31,41.24 L 446.32,49.42 L 444.38,61.56 L 442.60,77.60" stroke-width="2.13"/>
+<path d="M 442.68,77.59 L 444.31,71.25 L 446.50,67.01 L 450.33,61.30 L 454.33,59.41 L 458.15,59.49 L 460.11,61.58 L 460.20,65.28 L 458.03,71.16 L 458.20,74.92 L 460.01,76.87 L 462.12,76.90 L 466.17,75.22 L 468.10,73.33 L 472.18,67.02" stroke-width="2.07"/>
+<path d="M 477.42,71.96 L 481.72,69.88 L 483.83,67.89 L 486.29,63.63 L 486.38,59.32 L 484.35,57.43 L 482.15,57.42 L 478.04,59.30 L 475.77,63.26 L 475.73,69.44 L 477.63,73.89 L 481.65,76.16 L 485.80,76.50 L 490.11,74.23 L 491.95,72.07 L 496.56,65.82" stroke-width="1.76"/>
+<path d="M 499.51,66.58 L 503.44,60.57 L 505.60,56.79 L 505.30,60.83 L 511.35,61.06 L 513.37,62.94 L 513.36,66.83 L 511.34,72.59 L 511.11,74.74 L 513.24,76.63 L 515.41,76.91 L 519.27,74.96 L 521.15,73.02 L 525.42,67.25" stroke-width="2.07"/>
+<path d="M 531.28,71.72 L 535.66,69.80 L 537.92,67.58 L 540.02,63.72 L 540.29,59.56 L 538.39,57.39 L 536.38,57.31 L 532.05,59.24 L 529.61,63.21 L 529.60,69.46 L 531.30,73.63 L 535.20,75.79 L 539.12,75.99 L 543.53,74.18 L 545.61,72.37 L 549.91,66.50" stroke-width="1.95"/>
+<path d="M 555.49,65.46 L 553.09,67.65 L 555.22,69.67 L 557.22,67.39 L 555.34,65.21" stroke-width="1.76"/>
+<path d="M 9.60,121.49 L 5.36,119.63 L 3.22,115.75 L 2.98,113.49 L 4.94,109.56 L 9.24,107.58 L 11.25,107.25 L 15.46,109.24 L 17.69,113.46 L 17.67,117.38 L 15.68,127.81 L 13.92,135.77 L 9.96,150.35" stroke-width="1.79"/>
+<path d="M 13.83,135.89 L 19.67,119.59 L 23.59,111.28 L 25.60,109.28 L 29.82,106.79 L 31.66,106.94 L 35.74,108.90 L 37.93,112.82 L 37.95,116.80 L 36.11,127.14 L 34.50,135.52 L 30.59,149.88" stroke-width="1.98"/>
+<path d="M 34.37,135.51 L 40.16,118.88 L 44.29,110.44 L 46.15,108.15 L 49.97,105.90 L 51.86,105.93 L 56.23,108.01 L 58.35,112.06 L 58.71,116.33 L 56.79,126.51 L 53.13,140.84 L 53.24,146.91 L 55.08,149.16 L 57.10,148.90 L 61.41,146.60 L 63.47,144.67 L 67.11,138.56" stroke-width="2.16"/>
+<path d="M 83.90,130.26 L 79.72,129.97 L 75.46,132.03 L 73.29,133.89 L 71.32,138.25 L 70.96,142.27 L 72.74,146.71 L 77.04,149.21 L 81.36,149.48 L 85.40,147.54 L 87.58,145.59 L 89.68,141.13 L 90.07,137.18 L 88.33,132.73 L 83.97,130.25 L 82.03,132.44 L 81.85,136.43 L 83.76,140.87 L 87.91,142.90 L 94.23,143.12 L 98.36,141.26 L 100.23,139.24" stroke-width="2.17"/>
+<path d="M 102.86,138.06 L 106.97,131.59 L 109.29,127.21 L 109.25,131.36 L 115.69,130.85 L 118.08,133.01 L 118.32,137.45 L 116.44,143.80 L 116.69,146.13 L 118.92,148.18 L 121.15,147.98 L 125.26,145.52 L 127.50,143.24 L 131.33,136.76" stroke-width="2.03"/>
+<path d="M 136.68,145.26 L 140.82,143.32 L 142.89,141.44 L 145.03,137.20 L 145.00,132.84 L 142.76,130.92 L 140.57,130.79 L 136.65,133.19 L 134.49,137.54 L 134.72,143.46 L 136.73,147.79 L 140.74,149.75 L 145.05,149.58 L 149.24,147.39 L 151.44,145.10 L 155.60,139.04" stroke-width="1.96"/>
+<path d="M 180.46,139.69 L 184.21,133.38 L 186.00,129.46 L 186.00,133.59 L 190.36,139.50 L 192.47,143.55 L 192.67,147.46 L 188.83,149.76" stroke-width="2.09"/>
+<path d="M 180.72,147.81 L 184.70,149.77 L 193.04,149.48 L 196.91,147.34 L 198.76,145.39 L 202.64,139.06" stroke-width="2.05"/>
+<path d="M 219.70,132.94 L 215.27,133.01 L 210.73,134.79 L 208.59,136.73 L 206.10,141.27 L 205.89,145.55 L 207.89,150.01 L 212.57,152.39 L 217.04,152.74 L 221.58,150.53 L 223.91,148.37 L 225.99,143.88 L 226.21,139.74 L 224.30,135.30 L 219.75,133.05 L 217.55,135.04 L 217.57,139.60 L 219.58,144.07 L 223.81,146.55 L 230.27,146.87 L 234.86,144.45 L 237.23,142.43" stroke-width="2.14"/>
+<path d="M 252.93,132.74 L 248.50,132.78 L 244.02,134.81 L 242.21,137.20 L 240.11,141.38 L 239.95,145.35 L 242.32,149.50 L 246.40,151.89 L 250.70,151.67 L 254.78,149.40 L 256.76,147.53 L 259.14,143.33 L 258.99,139.18 L 256.67,134.94 L 252.47,132.85 L 250.35,134.91 L 250.43,139.10 L 252.69,143.14 L 257.02,145.41 L 263.36,145.14 L 267.43,142.89 L 269.71,140.65" stroke-width="1.99"/>
+<path d="M 272.99,138.51 L 276.75,132.67 L 280.77,130.71 L 282.91,132.96 L 282.67,134.62 L 280.86,142.79 L 278.82,148.55" stroke-width="1.87"/>
+<path d="M 280.65,142.77 L 282.66,138.58 L 286.57,132.71 L 290.73,130.84 L 294.94,130.80 L 297.02,132.97 L 296.99,137.05 L 294.81,142.76 L 294.55,146.74 L 296.66,148.61 L 298.90,148.88 L 302.92,147.05 L 304.69,145.06 L 308.47,138.84" stroke-width="1.99"/>
+<path d="M 401.90,159.13 L 397.43,152.42 L 393.13,141.57 L 391.05,128.46 L 391.16,115.40 L 393.45,108.53 L 397.79,106.26 L 402.53,106.62 L 404.62,108.70 L 406.98,115.41 L 406.73,121.85 L 404.31,132.82 L 397.85,152.55 L 393.47,165.76 L 391.25,172.32 L 388.81,176.46 L 384.37,178.47 L 382.44,176.14 L 382.43,172.01 L 384.53,165.66 L 389.18,159.16 L 393.35,154.57 L 399.96,150.45 L 408.71,146.23" stroke-width="1.77"/></g>
+            </svg>
+            <span class="trace__light"></span>
+          </div>
+        </div>
+        <ol class="trace__steps" aria-hidden="true">
+          <li class="is-on">Photograph the sentence</li>
+          <li>Letters found</li>
+          <li>Written as ink</li>
+        </ol>
+        <figcaption class="trace__cap">Illustration, drawn with a sample note. It is not a real photo of anyone&rsquo;s writing.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ POST PIGEON ============ -->
+  <section class="plan" id="post-pigeon" aria-labelledby="plan-title">
+    <div class="wrap plan__grid">
+      <div class="plan__head">
+        <h2 id="plan-title" class="h2" data-split>Post pigeon</h2>
+        <p class="plan__price" data-reveal><span>$9.99</span> a&nbsp;month</p>
+        <p class="plan__math" data-reveal>The plan costs less than paying per card once you send three in a month.</p>
+        <div class="cta-row" data-reveal>
+          <span class="magnet"><a class="btn btn--ink" href="../../create.html"><span class="btn__label">Make one</span></a></span>
+        </div>
+      </div>
+      <dl class="spec plan__spec">
+        <div class="spec__row" data-reveal><dt class="spec__k">Included</dt><dd class="spec__v">3 postcards a month, free</dd></div>
+        <div class="spec__row" data-reveal><dt class="spec__k">After that</dt><dd class="spec__v">$1 off every card ($3 instead of $4)</dd></div>
+        <div class="spec__row" data-reveal><dt class="spec__k">Gifting</dt><dd class="spec__v">Give it as a gift. They claim it by email.</dd></div>
+        <div class="spec__row" data-reveal><dt class="spec__k">Cancelling</dt><dd class="spec__v">Cancel any time. It lasts through the month you paid for.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq__grid">
+      <div class="faq__head">
+        <h2 id="faq-title" class="h2" data-split>Questions</h2>
+        <p data-reveal>Something else? <a class="textlink" href="../../contact.html">Contact us</a>.</p>
+      </div>
+      <div class="faq__list">
+        <details class="qa" name="faq" data-reveal>
+          <summary><span>Is the note handwritten?</span><i class="qa__icon" aria-hidden="true"></i></summary>
+          <div class="qa__a"><p>A machine draws your note on the card with a pen, following a path our software generates. It looks handwritten, but it isn&rsquo;t a person&rsquo;s hand.</p></div>
+        </details>
+        <details class="qa" name="faq" data-reveal>
+          <summary><span>How does the handwriting tracing work?</span><i class="qa__icon" aria-hidden="true"></i></summary>
+          <div class="qa__a"><p>Write a sentence that uses every letter of the alphabet, once in your normal handwriting and once in capitals, and photograph each one. The photos are uploaded, an algorithm finds your letters, and the photos are deleted. We then use your letters to write your cards.</p></div>
+        </details>
+        <details class="qa" name="faq" data-reveal>
+          <summary><span>How long does delivery take?</span><i class="qa__icon" aria-hidden="true"></i></summary>
+          <div class="qa__a"><p>Once it&rsquo;s in the mail, delivery is up to USPS, and we can&rsquo;t promise a date.</p></div>
+        </details>
+        <details class="qa" name="faq" data-reveal>
+          <summary><span>What does it cost?</span><i class="qa__icon" aria-hidden="true"></i></summary>
+          <div class="qa__a"><p>$4 a card. There&rsquo;s also an optional monthly plan.</p></div>
+        </details>
+        <details class="qa" name="faq" data-reveal>
+          <summary><span>Where will you mail it?</span><i class="qa__icon" aria-hidden="true"></i></summary>
+          <div class="qa__a"><p>Any address in the US.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING CTA ============ -->
+  <section class="close" aria-labelledby="close-title">
+    <svg class="close__path" viewBox="0 0 1440 640" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path id="flight" d="M-80 130 C 300 10, 700 30, 960 120 S 1300 210, 1540 50" fill="none" stroke="none"/>
+    </svg>
+    <svg class="close__bird" aria-hidden="true" focusable="false"><use href="#pp-mark"/></svg>
+    <div class="wrap close__inner">
+      <h2 id="close-title" class="h2 close__title" data-split>Try it before you pay.</h2>
+      <p class="close__p" data-reveal>Build a card and watch the note get written. You pay $4 only if you send it.</p>
+      <div class="cta-row" data-reveal>
+        <span class="magnet"><a class="btn btn--ink btn--lg" href="../../create.html"><span class="btn__label">Make one</span></a></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div class="foot__brand">
+      <a class="brand" href="#top" aria-label="PenPigeon, home">
+        <svg class="brand__mark" aria-hidden="true" focusable="false"><use href="#pp-mark"/></svg>
+        <span class="brand__name" translate="no">PenPigeon</span>
+      </a>
+      <p>Send a photo as a postcard.</p>
+    </div>
+    <nav class="foot__links" aria-label="Footer">
+      <a href="#top">Home</a>
+      <a href="../../create.html">Create</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="../../contact.html">Contact</a>
+      <a href="../../privacy.html">Privacy</a>
+      <a href="../../terms.html">Terms</a>
+    </nav>
+    <p class="foot__us">US addresses only.</p>
+  </div>
+</footer>
+
+<script src="../_shared/gsap/gsap.min.js"></script>
+<script src="../_shared/gsap/ScrollTrigger.min.js"></script>
+<script src="../_shared/gsap/SplitText.min.js"></script>
+<script src="../_shared/gsap/DrawSVGPlugin.min.js"></script>
+<script src="../_shared/gsap/ScrollToPlugin.min.js"></script>
+<script src="../_shared/gsap/MotionPathPlugin.min.js"></script>
+<script>if (!window.gsap || !window.ScrollTrigger) document.documentElement.classList.remove('js');</script>
+<script src="main.js"></script>
+</body>
+</html>

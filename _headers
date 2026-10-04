@@ -1,0 +1,5 @@
+# Private review site: keep it out of search results.
+/*
+  X-Robots-Tag: noindex, nofollow
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
